@@ -82,6 +82,7 @@ public:
     uint16 getID() const;
     uint16 getSubID() const;
     uint16 getFlag() const;
+    uint8  getAppraisalID() const;
     uint8  getAHCat() const;
     uint32 getReserve() const;
     uint32 getQuantity() const;
@@ -100,6 +101,7 @@ public:
     void setSubID(uint16);
     void setSubType(uint8);
     void setFlag(uint16);
+    void setAppraisalID(uint8 appraisailID);
     void setAHCat(uint8);
     void setReserve(uint32);
     void setQuantity(uint32);
@@ -121,6 +123,12 @@ public:
 
     virtual const int8* getSignature();
     virtual void        setSignature(int8* signature);
+
+    bool isSoultrapper() const;
+    void setSoulPlateData(std::string name, uint16 mobFamily, uint8 zeni, uint16 skillIndex, uint8 fp);
+    auto getSoulPlateData() -> std::tuple<std::string, uint16, uint8, uint16, uint8>;
+
+    bool isMannequin() const;
 
     static constexpr uint32_t extra_size = 0x18;
     uint8                     m_extra[extra_size]; // any extra data pertaining to item (augments, furniture location, etc)

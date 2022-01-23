@@ -7,18 +7,18 @@
 -----------------------------------
 require('scripts/globals/items')
 require('scripts/globals/quests')
-require("scripts/globals/titles")
+require('scripts/globals/titles')
 require('scripts/globals/npc_util')
 require('scripts/globals/interaction/quest')
 -----------------------------------
+
 local quest = Quest:new(xi.quest.log_id.OTHER_AREAS, xi.quest.id.otherAreas.UNENDING_CHASE)
------------------------------------
 
 quest.reward =
 {
     fame  = 120,
     fameArea = MHAURA,
-    title = xi.title.TWOSTAR_PURVEYOR,
+    title = xi.title.TWO_STAR_PURVEYOR,
     gil   = 2100,
 }
 

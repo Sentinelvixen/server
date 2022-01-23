@@ -8,7 +8,7 @@ CREATE TABLE `bcnm_battlefield` (
   `battlefieldNumber` tinyint(3) DEFAULT NULL,
   `monsterId` int(10) NOT NULL,
   `conditions` tinyint(2) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=56;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=56;
 
 --
 -- Dumping data for table `bcnm_battlefield`
@@ -1523,7 +1523,7 @@ INSERT INTO `bcnm_battlefield` VALUES (1294,6,16933152,0);-- 'Yagudo Eradicator'
 INSERT INTO `bcnm_battlefield` VALUES (1296,5,16933124,3);-- 'Proto-Omega'
 INSERT INTO `bcnm_battlefield` VALUES (1296,5,16933125,0);-- 'Gunpod'
 -- ------------------------------------
--- ------Temenos - Northern Tower
+-- Temenos - Northern Tower
 -- ------------------------------------
 INSERT INTO `bcnm_battlefield` VALUES (1299,1,16928772,1);-- Goblin Slaughterman
 INSERT INTO `bcnm_battlefield` VALUES (1299,1,16928773,1);-- Goblin Slaughterman
@@ -1574,7 +1574,7 @@ INSERT INTO `bcnm_battlefield` VALUES (1299,1,16928833,3);-- Goblin Theurgist
 INSERT INTO `bcnm_battlefield` VALUES (1299,1,16928834,3);-- Goblin Fencer
 INSERT INTO `bcnm_battlefield` VALUES (1299,1,16928835,3);-- Goblin Theurgist
 -- ------------------------
--- --Temenos - Eastern Tower
+-- Temenos - Eastern Tower
 -- ------------------------
 INSERT INTO `bcnm_battlefield` VALUES (1300,2,16928840,1);-- Fire Elemental
 INSERT INTO `bcnm_battlefield` VALUES (1300,2,16928841,1);-- Fire Elemental
@@ -1741,7 +1741,7 @@ INSERT INTO `bcnm_battlefield` VALUES (1303,7,16929050,3);-- Enhanced Dragon
 INSERT INTO `bcnm_battlefield` VALUES (1303,7,16929051,3);-- Enhanced Ahriman
 -- -------------------------------
 -- Central Temenos - Basement 1
--- ------------------------------
+-- -------------------------------
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929053,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929054,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929055,3);-- Temenos Aern
@@ -1778,3 +1778,9 @@ INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929085,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929086,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929087,3);-- Temenos Aern
 INSERT INTO `bcnm_battlefield` VALUES (1301,8,16929088,2);-- Temenos Ghrah
+-- -------------------------------
+-- La Vaule [S] (85)
+-- -------------------------------
+INSERT INTO `bcnm_battlefield` VALUES (2721,1,17125681,3); -- Galarhigg
+INSERT INTO `bcnm_battlefield` VALUES (2721,2,17125682,3); -- Galarhigg
+INSERT INTO `bcnm_battlefield` VALUES (2721,3,17125683,3); -- Galarhigg

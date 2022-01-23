@@ -2,9 +2,8 @@
 -- Area: Ru'Lude Gardens
 --  NPC: Splintery Chest
 -----------------------------------
-require("scripts/globals/settings")
-require("scripts/globals/keyitems")
 local ID = require("scripts/zones/RuLude_Gardens/IDs")
+require("scripts/settings/main")
 -----------------------------------
 local entity = {}
 
@@ -12,12 +11,11 @@ entity.onTrade = function(player,npc,trade)
 end
 
 entity.onTrigger = function(player,npc)
-    if ENABLE_MAGIAN_TRIALS ~= 1 then
+    if xi.settings.ENABLE_MAGIAN_TRIALS ~= 1 then
         return
     end
 
     player:startEvent(10133)
-
 end
 
 entity.onEventUpdate = function(player,csid,option)
@@ -77,8 +75,9 @@ entity.onEventFinish = function(player,csid,option)
     }
 
     itemId = optionTable[option]
-    if (option ~= 1073741824) then
-        if (not itemId) then
+
+    if option ~= 1073741824 then
+        if not itemId then
             -- How did you get here??
             player:PrintToPlayer( "itemId or OptionID related script error!" )
         elseif player:getFreeSlotsCount() >= 1 then

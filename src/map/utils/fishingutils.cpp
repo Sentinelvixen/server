@@ -19,7 +19,7 @@
 ===========================================================================
 */
 
-#include "../../common/showmsg.h"
+#include "../../common/logging.h"
 
 #include <cstring>
 
@@ -78,6 +78,10 @@ namespace fishingutils
 
     void StartFishing(CCharEntity* PChar)
     {
+        // NOTE: Fishing is disabled until further notice, since it is a security liability.
+        ShowWarning("Fishing is currently disabled");
+        return;
+
         if (PChar->animation != ANIMATION_NONE)
         {
             PChar->pushPacket(new CMessageSystemPacket(0, 0, 142));
@@ -89,7 +93,7 @@ namespace fishingutils
 
         if (MessageOffset == 0)
         {
-            ShowWarning(CL_YELLOW "Player wants to fish in %s\n" CL_RESET, PChar->loc.zone->GetName());
+            ShowWarning("Player wants to fish in %s", PChar->loc.zone->GetName());
             PChar->pushPacket(new CReleasePacket(PChar, RELEASE_TYPE::FISHING));
             return;
         }
@@ -135,7 +139,7 @@ namespace fishingutils
     {
         if (PChar->UContainer->GetType() != UCONTAINER_EMPTY)
         {
-            ShowDebug(CL_CYAN "Player cannot fish! UContainer is not empty\n" CL_RESET);
+            ShowDebug("Player cannot fish! UContainer is not empty");
             return false;
         }
 
@@ -375,6 +379,9 @@ namespace fishingutils
 
     void FishingAction(CCharEntity* PChar, FISH_ACTION action, uint16 stamina, uint32 special)
     {
+        ShowWarning("Fishing is currently disabled");
+        return;
+
         uint16 MessageOffset = GetMessageOffset(PChar->getZone());
 
         switch (action)

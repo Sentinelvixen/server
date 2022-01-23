@@ -94,6 +94,10 @@ end
 -- Variable helper functions
 -----------------------------------
 
+function Container:addVar(player, name, value)
+    return player:addCharVar(self.varPrefix .. name, value)
+end
+
 function Container:getVar(player, name)
     return player:getVar(self.varPrefix .. name)
 end
@@ -124,4 +128,23 @@ function Container:unsetVarBit(player, name, bitNum)
     if bit.band(currentValue, bitValue) ~= 0 then
         return player:setVar(self.varPrefix .. name, currentValue - bitValue)
     end
+end
+
+-- These helper functions will set or get a localVar using varPrefix to determine
+-- if zoning/logout is required.  There is no clearing support at this time, outside
+-- of legitimate methods.
+function Container:getMustZone(player)
+    return player:getLocalVar(self.varPrefix .. "mustZone") == 1 and true or false
+end
+
+function Container:setMustZone(player)
+    player:setLocalVar(self.varPrefix .. "mustZone", 1)
+end
+
+function Container:getLocalVar(player, name)
+    return player:getLocalVar(self.varPrefix .. name)
+end
+
+function Container:setLocalVar(player, name, value)
+    return player:setLocalVar(self.varPrefix .. name, value)
 end

@@ -40,6 +40,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 CTrustController::CTrustController(CCharEntity* PChar, CTrustEntity* PTrust)
 : CMobController(PTrust)
 , m_GambitsContainer(std::make_unique<gambits::CGambitsContainer>(PTrust))
+, m_InTransit(false)
 {
 
 }
@@ -105,6 +106,12 @@ void CTrustController::DoCombatTick(time_point tick)
     {
         POwner->PAI->Internal_ChangeTarget(POwner->PMaster->GetBattleTargetID());
         m_LastTopEnmity = nullptr;
+    }
+
+    // If busy, don't run around!
+    if (POwner->PAI->IsCurrentState<CMagicState>() || POwner->PAI->IsCurrentState<CRangeState>())
+    {
+        return;
     }
 
     CTrustEntity* PTrust  = static_cast<CTrustEntity*>(POwner);
@@ -481,7 +488,7 @@ uint8 CTrustController::GetPartyPosition()
     TracyZoneScoped;
 
     auto& trustList = static_cast<CCharEntity*>(POwner->PMaster)->PTrusts;
-    for (uint8 i = 0; i < trustList.size(); ++i)
+    for (std::size_t i = 0; i < trustList.size(); ++i)
     {
         if (trustList.at(i)->id == POwner->id)
         {

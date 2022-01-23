@@ -3,8 +3,7 @@
 --  NPC: Medicine Eagle
 -- Involved in Mission: Bastok 6-1, 8-1
 -- !pos -40 0 38 234
------------------------------------
-require("scripts/globals/missions")
+-- Events 1, 25, 176, 180, 181
 -----------------------------------
 local entity = {}
 
@@ -12,28 +11,12 @@ entity.onTrade = function(player, npc, trade)
 end
 
 entity.onTrigger = function(player, npc)
-
-    if (player:getCurrentMission(BASTOK) == xi.mission.id.bastok.RETURN_OF_THE_TALEKEEPER and player:getMissionStatus(player:getNation()) == 0) then
-        player:startEvent(180)
-    else
-        player:startEvent(25)
-    end
-
 end
 
--- if Bastok Mission 8-1
--- 176
--- player:startEvent(180)
--- player:startEvent(181)
---1  25  176  181  180
 entity.onEventUpdate = function(player, csid, option)
 end
 
 entity.onEventFinish = function(player, csid, option)
-
-    if (csid == 180) then
-        player:setMissionStatus(player:getNation(), 1)
-    end
 end
 
 return entity

@@ -74,6 +74,7 @@ void        EncodeStringLinkshell(int8* signature, int8* target);
 void        DecodeStringLinkshell(int8* signature, int8* target);
 int8*       EncodeStringSignature(int8* signature, int8* target);
 void        DecodeStringSignature(int8* signature, int8* target);
+void        PackSoultrapperName(std::string name, uint8 output[], uint8 size);
 std::string escape(std::string const& s);
 
 // Float tools
@@ -82,5 +83,7 @@ bool approximatelyEqual(float a, float b);
 bool essentiallyEqual(float a, float b);
 bool definitelyGreaterThan(float a, float b);
 bool definitelyLessThan(float a, float b);
+
+void crash();
 
 #endif

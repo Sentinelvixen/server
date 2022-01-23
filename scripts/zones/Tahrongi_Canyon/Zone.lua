@@ -1,7 +1,5 @@
 -----------------------------------
---
 -- Zone: Tahrongi_Canyon (117)
---
 -----------------------------------
 local ID = require("scripts/zones/Tahrongi_Canyon/IDs")
 require("scripts/quests/i_can_hear_a_rainbow")
@@ -12,6 +10,7 @@ require("scripts/globals/chocobo")
 require("scripts/globals/world")
 require("scripts/globals/helm")
 require("scripts/globals/zone")
+require("scripts/missions/amk/helpers")
 -----------------------------------
 local zone_object = {}
 
@@ -34,8 +33,11 @@ zone_object.onZoneIn = function(player, prevZone)
 
     if quests.rainbow.onZoneIn(player) then
         cs = 35
-    elseif player:getCurrentMission(WINDURST) == xi.mission.id.windurst.VAIN and player:getMissionStatus(player:getNation()) == 1 then
-        cs = 37
+    end
+
+    -- AMK06/AMK07
+    if xi.settings.ENABLE_AMK == 1 then
+        xi.amk.helpers.tryRandomlyPlaceDiggingLocation(player)
     end
 
     return cs
@@ -51,12 +53,6 @@ end
 zone_object.onEventUpdate = function(player, csid, option)
     if csid == 35 then
         quests.rainbow.onEventUpdate(player)
-    elseif csid == 37 then
-        if player:getPreviousZone() == xi.zone.EAST_SARUTABARUTA or player:getPreviousZone() == xi.zone.BUBURIMU_PENINSULA then
-            player:updateEvent(0, 0, 0, 0, 0, 7)
-        elseif player:getPreviousZone() == xi.zone.MAZE_OF_SHAKHRAMI then
-            player:updateEvent(0, 0, 0, 0, 0, 6)
-        end
     end
 end
 

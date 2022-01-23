@@ -25,7 +25,7 @@ CREATE TABLE `abilities` (
   `addType` smallint(2) NOT NULL DEFAULT '0',
   `content_tag` varchar(7) DEFAULT NULL,
   PRIMARY KEY (`abilityId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=56;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=56;
 
 --
 -- Dumping data for table `abilities`
@@ -265,7 +265,7 @@ INSERT INTO `abilities` VALUES (247,'composure',5,50,1,300,50,0,0,215,2000,0,6,2
 INSERT INTO `abilities` VALUES (248,'yonin',13,40,1,180,146,0,0,218,2000,0,6,20.0,0,1,600,0,4,'WOTG');
 INSERT INTO `abilities` VALUES (249,'innin',13,40,1,180,147,0,0,219,2000,0,6,20.0,0,1,60,0,4,'WOTG');
 -- INSERT INTO `abilities` VALUES (250,'avatars_favor',15,55,4,30,176,100,0,94,2000,0,6,10.0,1,1,80,0,0,NULL);
-INSERT INTO `abilities` VALUES (251,'ready',9,25,1,0,255,0,0,83,2000,0,6,18.0,0,0,0,902,64,NULL);
+INSERT INTO `abilities` VALUES (251,'ready',9,25,1,0,102,0,0,83,2000,0,6,18.0,0,0,0,902,64,NULL);
 -- INSERT INTO `abilities` VALUES (252,'restraint',1,77,1,600,9,100,0,220,2000,0,6,20.0,0,450,900,0,0,NULL);
 INSERT INTO `abilities` VALUES (253,'perfect_counter',2,79,1,60,22,100,0,221,2000,0,6,20.0,0,1,80,0,0,NULL);
 INSERT INTO `abilities` VALUES (254,'mana_wall',4,76,1,600,39,0,0,222,2000,0,6,20.0,0,1,0,0,0,NULL);

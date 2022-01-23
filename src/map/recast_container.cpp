@@ -19,7 +19,7 @@
 ===========================================================================
 */
 
-#include "../common/showmsg.h"
+#include "../common/logging.h"
 #include "../common/timer.h"
 
 #include "packets/inventory_finish.h"
@@ -263,7 +263,7 @@ void CRecastContainer::Check()
     {
         RecastList_t* PRecastList = GetRecastList(type);
 
-        for (uint16 i = 0; i < PRecastList->size(); ++i)
+        for (std::size_t i = 0; i < PRecastList->size(); ++i)
         {
             Recast_t* recast = &PRecastList->at(i);
 

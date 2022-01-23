@@ -103,6 +103,22 @@ uint16 CItem::getFlag() const
 }
 
 /************************************************************************
+*                                                                       *
+*  Appraisal Origin IDs                                                 *
+*                                                                       *
+************************************************************************/
+
+uint8 CItem::getAppraisalID() const
+{
+    return m_extra[0x16];
+}
+
+void CItem::setAppraisalID(uint8 appraisailID)
+{
+    m_extra[0x16] = appraisailID;
+}
+
+/************************************************************************
  *                                                                       *
  *                                                                       *
  *                                                                       *
@@ -357,4 +373,42 @@ bool CItem::isSent() const
 bool CItem::isStorageSlip() const
 {
     return m_id < 29340 && m_id > 29311;
+}
+
+bool CItem::isSoultrapper() const
+{
+    return m_id == 18721 || m_id == 18724;
+}
+
+void CItem::setSoulPlateData(std::string name, uint16 mobFamily, uint8 zeni, uint16 skillIndex, uint8 fp)
+{
+    PackSoultrapperName(name, m_extra, name.size());
+
+    // Hack: Artificially chop off extremely long names, so we can pack the mobFamily info into m_extra
+    m_extra[17] = (mobFamily & 0xFF00) >> 8;
+    m_extra[18] = mobFamily & 0x00FF;
+
+    m_extra[19] = zeni;
+
+    m_extra[20] = skillIndex << 7;
+    m_extra[21] = skillIndex >> 1;
+    m_extra[22] = skillIndex >> 9;
+
+    m_extra[22] = fp << 3;
+    m_extra[23] = (0x03 << 4) & fp;
+}
+
+auto CItem::getSoulPlateData() -> std::tuple<std::string, uint16, uint8, uint16, uint8>
+{
+    auto   name = "";
+    uint16 mobFamily  = (m_extra[17] << 8) + m_extra[18];
+    uint8  zeni       = m_extra[19];
+    uint16 skillIndex = (m_extra[20] >> 7) + (m_extra[21] << 1) + ((m_extra[22] & 0x03) << 9);
+    uint8  fp         = (m_extra[22] >> 3) + ((m_extra[23] & 0x03) << 4);
+    return std::tuple(name, mobFamily, zeni, skillIndex, fp);
+}
+
+bool CItem::isMannequin() const
+{
+    return m_id >= 256 && m_id <= 263;
 }

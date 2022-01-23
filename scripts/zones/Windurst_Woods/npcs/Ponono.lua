@@ -16,8 +16,8 @@ require("scripts/globals/status")
 local entity = {}
 
 entity.onTrade = function(player, npc, trade)
-    local signed = trade:getItem():getSignature() == player:getName() and 1 or 0
-    local newRank = tradeTestItem(player, npc, trade, xi.skill.CLOTHCRAFT)
+    local signed        = trade:getItem():getSignature() == player:getName() and 1 or 0
+    local newRank       = xi.crafting.tradeTestItem(player, npc, trade, xi.skill.CLOTHCRAFT)
     local moralManifest = player:getQuestStatus(xi.quest.log_id.OTHER_AREAS, xi.quest.id.otherAreas.A_MORAL_MANIFEST)
 
     if
@@ -50,15 +50,21 @@ end
 entity.onTrigger = function(player, npc)
     local moralManifest = player:getQuestStatus(xi.quest.log_id.OTHER_AREAS, xi.quest.id.otherAreas.A_MORAL_MANIFEST)
 
-    local craftSkill = player:getSkillLevel(xi.skill.CLOTHCRAFT)
-    local testItem = getTestItem(player, npc, xi.skill.CLOTHCRAFT)
-    local guildMember = isGuildMember(player, 3)
-    local rankCap = getCraftSkillCap(player, xi.skill.CLOTHCRAFT)
+    local craftSkill        = player:getSkillLevel(xi.skill.CLOTHCRAFT)
+    local testItem          = xi.crafting.getTestItem(player, npc, xi.skill.CLOTHCRAFT)
+    local guildMember       = xi.crafting.isGuildMember(player, 3)
+    local rankCap           = xi.crafting.getCraftSkillCap(player, xi.skill.CLOTHCRAFT)
     local expertQuestStatus = 0
-    local Rank = player:getSkillRank(xi.skill.CLOTHCRAFT)
-    local realSkill = (craftSkill - Rank) / 32
+    local Rank              = player:getSkillRank(xi.skill.CLOTHCRAFT)
+    local realSkill         = (craftSkill - Rank) / 32
 
-    if guildMember == 1 then guildMember = 10000; end
+    if guildMember == 1 then
+        guildMember = 10000
+    end
+
+    if xi.crafting.unionRepresentativeTriggerRenounceCheck(player, 10011, realSkill, rankCap, 184549887) then
+        return
+    end
 
     if player:getCharVar("ClothcraftExpertQuest") == 1 then
         if player:hasKeyItem(xi.keyItem.WAY_OF_THE_WEAVER) then
@@ -92,10 +98,17 @@ end
 
 -- 10011  10012  700  701  702  703  704  705  832  765
 entity.onEventUpdate = function(player, csid, option)
+    if
+        csid == 10011 and
+        option >= xi.skill.WOODWORKING and
+        option <= xi.skill.COOKING
+    then
+        xi.crafting.unionRepresentativeEventUpdateRenounce(player, option)
+    end
 end
 
 entity.onEventFinish = function(player, csid, option)
-    local guildMember = isGuildMember(player, 3)
+    local guildMember = xi.crafting.isGuildMember(player, 3)
 
     if csid == 700 then
         player:setCharVar("moral", 2)
@@ -113,7 +126,7 @@ entity.onEventFinish = function(player, csid, option)
         else
             player:addItem(4099) -- earth crystal
             player:messageSpecial(ID.text.ITEM_OBTAINED, xi.items.EARTH_CRYSTAL)
-            signupGuild(player, guild.clothcraft)
+            xi.crafting.signupGuild(player, xi.crafting.guild.clothcraft)
         end
     else
         if player:getLocalVar("ClothcraftTraded") == 1 then

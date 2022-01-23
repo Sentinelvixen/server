@@ -3,7 +3,7 @@
 -- Item: Leaf Bench
 -- Item Effect: Grant Leaf bench key item
 -----------------------------------
-require("scripts/globals/settings")
+require("scripts/settings/main")
 require("scripts/globals/keyitems")
 require("scripts/globals/msg")
 -----------------------------------
@@ -20,7 +20,7 @@ end
 
 item_object.onItemUse = function(target)
     target:addKeyItem(keyItemId)
-    target:messageBasic(xi.basic.OBTAINED_KEY_ITEM, 6412, keyItemId)
+    target:messageBasic(xi.msg.basic.OBTAINED_KEY_ITEM, 6412, keyItemId)
 end
 
 return item_object

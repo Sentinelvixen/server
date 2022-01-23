@@ -20,13 +20,14 @@
 */
 
 #include "../common/kernel.h"
-#include "../common/showmsg.h"
 #include "../common/socket.h"
 #include "../common/taskmgr.h"
 #include "../common/timer.h"
 #include "../common/version.h"
 
-#include "fmt/printf.h"
+#include "debug.h"
+#include "logging.h"
+
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
@@ -86,7 +87,7 @@ sigfunc* compat_signal(int signo, sigfunc* func)
 
 /************************************************************************
  *                                                                       *
- *  CORE : Magical backtrace dump procedure                              *
+ *  CORE : Magical backtrace dump procedure (Linux + gdb)                *
  *                                                                       *
  ************************************************************************/
 
@@ -137,7 +138,8 @@ static void dump_backtrace()
             ShowError("read failed for gdb backtrace: %s", strerror(errno));
             _exit(EXIT_FAILURE);
         }
-        ShowFatalError("--- gdb backtrace ---\n%s", buf);
+        ShowFatalError("--- gdb backtrace ---");
+        ShowFatalError("%s", buf);
     }
 #endif
 }
@@ -174,11 +176,11 @@ static void sig_proc(int sn)
 #ifndef _WIN32
         case SIGXFSZ:
             // ignore and allow it to set errno to EFBIG
-            ShowWarning("Max file size reached!\n");
+            ShowWarning("Max file size reached!");
             // run_flag = 0;	// should we quit?
             break;
         case SIGPIPE:
-            // ShowInfo ("Broken pipe found... closing socket\n");	// set to eof in socket.c
+            // ShowInfo ("Broken pipe found... closing socket");	// set to eof in socket.c
             break; // does nothing here
 #endif
     }
@@ -210,17 +212,6 @@ void signals_init()
 
 /************************************************************************
  *																		*
- *  CORE : Display title													*
- *																		*
- ************************************************************************/
-
-static void display_title()
-{
-    ShowInfo("Topaz\n");
-}
-
-/************************************************************************
- *																		*
  *  Warning if logged in as superuser (root)								*
  *																		*
  ************************************************************************/
@@ -230,8 +221,8 @@ void usercheck()
 #ifndef _WIN32
     if ((getuid() == 0) && (getgid() == 0))
     {
-        ShowWarning("You are running Topaz as the root superuser.\n");
-        ShowWarning("It is unnecessary and unsafe to run with root privileges.\n");
+        ShowWarning("You are running as the root superuser.");
+        ShowWarning("It is unnecessary and unsafe to run with root privileges.");
         sleep(3);
     }
 #endif
@@ -245,6 +236,8 @@ void usercheck()
 #ifndef DEFINE_OWN_MAIN
 int main(int argc, char** argv)
 {
+    debug::init();
+
     { // initialize program arguments
         char* p1 = SERVER_NAME = argv[0];
         char* p2               = p1;
@@ -259,7 +252,6 @@ int main(int argc, char** argv)
 
     log_init(argc, argv);
     set_server_type();
-    display_title();
     usercheck();
     signals_init();
     timer_init();

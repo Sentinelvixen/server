@@ -8,9 +8,10 @@
 -- Norg        : !zone 252
 -----------------------------------
 require('scripts/globals/interaction/mission')
-require("scripts/globals/keyitems")
+require('scripts/globals/keyitems')
 require('scripts/globals/missions')
-require("scripts/globals/titles")
+require('scripts/globals/titles')
+require('scripts/globals/utils')
 require('scripts/globals/zone')
 -----------------------------------
 
@@ -34,6 +35,10 @@ mission.sections =
         }
     },
 
+    -- Optional cutscenes that should be displayed only once onZone.  In this
+    -- case, missionStatus is handled as a bitfield, and missionStatus < 3 isn't
+    -- really required.
+    -- TODO: Remove this and refactor.
     {
         check = function(player, currentMission, missionStatus, vars)
             return currentMission == mission.missionId and missionStatus < 3
@@ -41,16 +46,19 @@ mission.sections =
 
         [xi.zone.LOWER_JEUNO] =
         {
-            onRegionEnter =
+            ['_6tc'] =
             {
-                [1] = function(player, csid, option, npc)
-                    return mission:event(20)
+                onTrigger = function(player, csid, option, npc)
+                    if not utils.mask.getBit(player:getMissionStatus(mission.areaId), 1) then
+                        return mission:event(20)
+                    end
                 end,
             },
 
             onEventFinish =
             {
                 [20] = function(player, csid, option, npc)
+                    -- Set bit 1 of missionStatus
                     player:setMissionStatus(mission.areaId, player:getMissionStatus(mission.areaId) + 2)
                 end,
             },
@@ -61,13 +69,16 @@ mission.sections =
             onZoneIn =
             {
                 function(player, prevZone)
-                    return 176
+                    if not utils.mask.getBit(player:getMissionStatus(mission.areaId), 0) then
+                        return 176
+                    end
                 end,
             },
 
             onEventFinish =
             {
                 [176] = function(player, csid, option, npc)
+                    -- Set bit 0 of missionStatus
                     player:setMissionStatus(mission.areaId, player:getMissionStatus(mission.areaId) + 1)
                 end,
             },

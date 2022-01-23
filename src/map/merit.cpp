@@ -220,7 +220,7 @@ void CMeritPoints::LoadMeritPoints(uint32 charid)
 
     if (Sql_Query(SqlHandle, "SELECT meritid, upgrades FROM char_merit WHERE charid = %u", charid) != SQL_ERROR)
     {
-        for (uint16 j = 0; j < Sql_NumRows(SqlHandle); j++)
+        for (uint64 j = 0; j < Sql_NumRows(SqlHandle); j++)
         {
             if (Sql_NextRow(SqlHandle) == SQL_SUCCESS)
             {
@@ -580,7 +580,7 @@ namespace meritNameSpace
         }
         else
         {
-            ShowError(CL_RED "The merits table is damaged\n" CL_RESET);
+            ShowError("The merits table is damaged");
         }
     }
 

@@ -2,15 +2,15 @@
 -- Area: Apollyon SE
 --  Mob: Ghost Clot
 -----------------------------------
-require("scripts/globals/limbus")
 local ID = require("scripts/zones/Apollyon/IDs")
+require("scripts/globals/limbus")
 -----------------------------------
 local entity = {}
 
 entity.onMobSpawn = function(mob)
-    mob:setMod(xi.mod.SLASHRES, 1500)
-    mob:setMod(xi.mod.HTHRES, 0)
-    mob:setMod(xi.mod.IMPACTRES, 0)
+    mob:setMod(xi.mod.SLASH_SDT, 1500)
+    mob:setMod(xi.mod.HTH_SDT, 0)
+    mob:setMod(xi.mod.IMPACT_SDT, 0)
 end
 
 entity.onMobDeath = function(mob, player, isKiller, noKiller)

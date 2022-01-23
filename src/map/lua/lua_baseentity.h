@@ -46,6 +46,8 @@ public:
         return m_PBaseEntity;
     }
 
+    friend std::ostream& operator<<(std::ostream& out, const CLuaBaseEntity& entity);
+
     // Messaging System
     void showText(CLuaBaseEntity* mob, uint16 messageID, sol::object const& p0, sol::object const& p1, sol::object const& p2, sol::object const& p3); // Displays Dialog for npc
     void messageText(CLuaBaseEntity* PLuaBaseEntity, uint16 messageID, sol::object const& arg2, sol::object const& arg3);
@@ -77,15 +79,20 @@ public:
     void entityVisualPacket(std::string const& command, sol::object const& entity);
     void entityAnimationPacket(const char* command);
 
-    void startEvent(uint32 EventID, sol::variadic_args va);
-    void startEventString(uint16 EventID, sol::variadic_args va); // Begins Event with string param (0x33 packet)
+    void       StartEventHelper(int32 EventID, sol::variadic_args va, EVENT_TYPE eventType);
+    EventInfo* ParseEvent(int32 EventID, sol::variadic_args va, EventPrep* eventPreparation, EVENT_TYPE eventType);
+    void       startEvent(int32 EventID, sol::variadic_args va);
+    void       startEventString(int32 EventID, sol::variadic_args va); // Begins Event with string param (0x33 packet)
+    void       startCutscene(int32 EventID, sol::variadic_args va); // Begins cutscene which locks the character
+    void       startOptionalCutscene(int32 EventID, sol::variadic_args va); // Begins an event that can turn into a cutscene
+
     void updateEvent(sol::variadic_args va);                      // Updates event
     void updateEventString(sol::variadic_args va);                // (string, string, string, string, uint32, ...)
     auto getEventTarget() -> std::optional<CLuaBaseEntity>;
-    bool isInEvent(); // Returns true if the player is in an event
-    void release(); // Stops event
-    bool startSequence(); // Flags the player as being in a sequence
-    bool didGetMessage(); // Used by interaction framework to determine if player triggered something else
+    bool isInEvent();       // Returns true if the player is in an event
+    void release();         // Stops event
+    bool startSequence();   // Flags the player as being in a sequence
+    bool didGetMessage();   // Used by interaction framework to determine if player triggered something else
     void resetGotMessage(); // Used by interaction framework to reset if player triggered something else
 
     void  setFlag(uint32 flags);
@@ -148,7 +155,7 @@ public:
     void sendEmote(CLuaBaseEntity* target, uint8 emID, uint8 emMode);       // Character emits emote packet.
 
     // Location and Positioning
-    int16 getWorldAngle(CLuaBaseEntity const* target, sol::object const& deg);  // return angle (rot) between two points (vector from a to b), aligned to absolute cardinal degree
+    int16 getWorldAngle(sol::variadic_args va);                                 // return angle (rot) between two points (vector from a to b), aligned to absolute cardinal degree
     int16 getFacingAngle(CLuaBaseEntity const* target);                         // return angle between entity rot and target pos, aligned to number of degrees of difference
     bool  isFacing(CLuaBaseEntity const* target, sol::object const& angleArg);  // true if you are facing the target
     bool  isInfront(CLuaBaseEntity const* target, sol::object const& angleArg); // true if you're infront of the input target
@@ -167,13 +174,13 @@ public:
     uint32 getPlayerRegionInZone();                                                           // Returns the player's current region in the zone. (regions made with registerRegion)
     void   updateToEntireZone(uint8 statusID, uint8 animation, sol::object const& matchTime); // Forces an update packet to update the NPC entity zone-wide
 
-    auto  getPos() -> sol::table; // Get Entity position (x,y,z)
-    void  showPosition();         // Display current position of character
-    float getXPos();              // Get Entity X position
-    float getYPos();              // Get Entity Y position
-    float getZPos();              // Get Entity Z position
-    uint8 getRotPos();            // Get Entity Rot position
-    void setRotation(uint8 rotation); // Set Entity rotation
+    auto  getPos() -> sol::table;      // Get Entity position (x,y,z)
+    void  showPosition();              // Display current position of character
+    float getXPos();                   // Get Entity X position
+    float getYPos();                   // Get Entity Y position
+    float getZPos();                   // Get Entity Z position
+    uint8 getRotPos();                 // Get Entity Rot position
+    void  setRotation(uint8 rotation); // Set Entity rotation
 
     void setPos(sol::variadic_args va);                                       // Set Entity position (x,y,z,rot) or (x,y,z,rot,zone)
     void warp();                                                              // Returns Character to home point
@@ -210,6 +217,8 @@ public:
     auto getCurrentGPItem(uint8 guildID) -> std::tuple<uint16, uint16>;                                 // Gets current GP item id and max points
     bool breakLinkshell(std::string const& lsname);                                                     // Breaks all pearls/sacks
     bool addLinkpearl(std::string const& lsname, bool equip);                                           // Creates a linkpearl (pearlsack for GMs)
+
+    auto addSoulPlate(std::string const& name, uint16 mobFamily, uint8 zeni, uint16 skillIndex, uint8 fp) -> std::optional<CLuaItem>;
 
     // Trading
     uint8 getContainerSize(uint8 locationID);                  // Gets the current capacity of a container
@@ -318,9 +327,9 @@ public:
 
     uint8  getRank(uint8 nation);            // Get Rank for current active nation
     void   setRank(uint8 rank);              // Set Rank
-    uint32 getRankPoints();                  // Get Current Rank points
-    void   addRankPoints(uint32 rankpoints); // Add rank points to existing rank point total
-    void   setRankPoints(uint32 rankpoints); // Set Current Rank points
+    uint16 getRankPoints();                  // Get Current Rank points
+    void   addRankPoints(uint16 rankpoints); // Add rank points to existing rank point total
+    void   setRankPoints(uint16 rankpoints); // Set Current Rank points
 
     void  addQuest(uint8 questLogID, uint16 questID);          // Add Quest to Entity Quest Log
     void  delQuest(uint8 questLogID, uint16 questID);          // Remove quest from quest log (should be used for debugging only)
@@ -423,7 +432,8 @@ public:
     void  setTP(int16 value);  // Set tp of Entity to value
     void  delTP(int16 amount); // Subtract tp of Entity
 
-    void updateHealth();
+    void  updateHealth();
+    uint8 getAverageItemLevel();
 
     // Skills and Abilities
     void capSkill(uint8 skill); // Caps the given skill id for the job you're on (GM COMMAND)
@@ -486,7 +496,7 @@ public:
     // Instances
     auto getInstance() -> std::optional<CLuaInstance>;
     void setInstance(CLuaInstance* PLuaInstance);
-    void createInstance(uint8 instanceID, uint16 zoneID);
+    void createInstance(uint16 instanceID);
     void instanceEntry(CLuaBaseEntity* PLuaBaseEntity, uint32 response);
     // int32 isInAssault(lua_Stat*); // If player is in a Instanced Assault Dungeon returns true --- Not Implemented
 
@@ -598,6 +608,7 @@ public:
     void uncharm();                           // removes charm on target
 
     uint8 addBurden(uint8 element, uint8 burden);
+    uint8 getOverloadChance(uint8 element);
     void  setStatDebilitation(uint16 statDebil);
 
     // Damage Calculation
@@ -627,7 +638,7 @@ public:
 
     void removeAmmo();
 
-    uint8  getWeaponSkillLevel(uint8 slotID);                        // Get Skill for equipped weapon
+    uint16 getWeaponSkillLevel(uint8 slotID);                        // Get Skill for equipped weapon
     uint16 getWeaponDamageType(uint8 slotID);                        // gets the type of weapon equipped
     uint8  getWeaponSkillType(uint8 slotID);                         // gets the type of weapon equipped
     uint8  getWeaponSubSkillType(uint8 slotID);                      // gets the subskill of weapon equipped
@@ -658,9 +669,11 @@ public:
     uint32 getPetID();                                // If the entity has a pet, returns the PetID to identify pet type.
     auto   getMaster() -> std::optional<CLuaBaseEntity>;
     uint8  getPetElement();
+    void   setPet(sol::object const& petObj);
 
     auto getPetName() -> const char*;
     void setPetName(uint8 pType, uint16 value, sol::object const& arg2);
+    void registerChocobo(uint32 value);
 
     float getCharmChance(CLuaBaseEntity const* target, sol::object const& mods); // Gets the chance the entity has to charm its target.
     void  charmPet(CLuaBaseEntity const* target);                                // Charms Pet (Beastmaster ability only)
@@ -721,7 +734,7 @@ public:
     void SetAutoAttackEnabled(bool state);   // halts/resumes auto attack of entity
     void SetMagicCastingEnabled(bool state); // halt/resumes casting magic
     void SetMobAbilityEnabled(bool state);   // halt/resumes mob skills
-    void SetMobSkillAttack(int16 value);     // enable/disable using mobskills as regular attacks
+    void SetMobSkillAttack(int16 listId);     // enable/disable using mobskills as regular attacks
 
     int16 getMobMod(uint16 mobModID);
     void  setMobMod(uint16 mobModID, int16 value);

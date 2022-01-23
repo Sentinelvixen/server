@@ -7,21 +7,22 @@
 -----------------------------------
 require('scripts/globals/items')
 require('scripts/globals/quests')
-require("scripts/globals/titles")
+require('scripts/globals/titles')
 require('scripts/globals/npc_util')
 require('scripts/globals/interaction/quest')
-local mhauraID = require("scripts/zones/Mhaura/IDs")
 -----------------------------------
+local mhauraID = require('scripts/zones/Mhaura/IDs')
+-----------------------------------
+
 local quest          = Quest:new(xi.quest.log_id.OTHER_AREAS, xi.quest.id.otherAreas.WAY_OF_THE_COOK)
 local daysPassed     = 0
 local totalHoursLeft = 0
------------------------------------
 
 quest.reward =
 {
     fame  = 120,
     fameArea = MHAURA,
-    title = xi.title.ONESTAR_PURVEYOR,
+    title = xi.title.ONE_STAR_PURVEYOR,
 }
 
 quest.sections =
@@ -69,14 +70,14 @@ quest.sections =
             ['Rycharde'] =
             {
                 onTrigger = function(player, npc)
-                        daysPassed     = VanadielDayOfTheYear() - quest:getVar(player, "DayStarted")
-                        totalHoursLeft = 72 - (VanadielHour() + daysPassed * 24) + quest:getVar(player, "HourStarted")
+                    daysPassed     = VanadielDayOfTheYear() - quest:getVar(player, "DayStarted")
+                    totalHoursLeft = 72 - (VanadielHour() + daysPassed * 24) + quest:getVar(player, "HourStarted")
 
-                        if totalHoursLeft > 0 then
-                            return quest:event(78, totalHoursLeft) -- You have x hours left.
-                        else
-                            return quest:event(79) -- Not done yet.
-                        end
+                    if totalHoursLeft > 0 then
+                        return quest:event(78, totalHoursLeft) -- You have x hours left.
+                    else
+                        return quest:event(79) -- Not done yet.
+                    end
                 end,
 
                 onTrade = function(player, npc, trade)
@@ -98,8 +99,8 @@ quest.sections =
                 [80] = function(player, csid, option, npc)
                     if quest:complete(player) then
                         player:tradeComplete()
-                        player:addGil(GIL_RATE*1500)
-                        player:messageSpecial(mhauraID.text.GIL_OBTAINED, GIL_RATE*1500)
+                        player:addGil(xi.settings.GIL_RATE * 1500)
+                        player:messageSpecial(mhauraID.text.GIL_OBTAINED, xi.settings.GIL_RATE * 1500)
                         quest:setVar(player, 'DayCompleted', VanadielUniqueDay()) -- Set completition day of WAY_OF_THE_COOK quest.
                     end
                 end,
@@ -107,8 +108,8 @@ quest.sections =
                 [81] = function(player, csid, option, npc)
                     if quest:complete(player) then
                         player:tradeComplete()
-                        player:addGil(GIL_RATE*1000)
-                        player:messageSpecial(mhauraID.text.GIL_OBTAINED, GIL_RATE*1000)
+                        player:addGil(xi.settings.GIL_RATE * 1000)
+                        player:messageSpecial(mhauraID.text.GIL_OBTAINED, xi.settings.GIL_RATE * 1000)
                         quest:setVar(player, 'DayCompleted', VanadielUniqueDay()) -- Set completition day of WAY_OF_THE_COOK quest.
                     end
                 end,

@@ -7,13 +7,13 @@ local ID = require("scripts/zones/Windurst_Waters/IDs")
 require("scripts/globals/events/harvest_festivals")
 require("scripts/globals/conquest")
 require("scripts/globals/missions")
-require("scripts/globals/settings")
+require("scripts/settings/main")
 require("scripts/globals/zone")
 -----------------------------------
 local zone_object = {}
 
 zone_object.onInitialize = function(zone)
-    -- Check if we are on Windurst Mission 1-3
+    -- Used for Windurst Mission 1-3
     zone:registerRegion(1, 23, -12, -208, 31, -8, -197)
 
     applyHalloweenNpcCostumes(zone:getID())
@@ -22,7 +22,7 @@ end
 zone_object.onZoneIn = function(player, prevZone)
     local cs = -1
 
-    if ENABLE_ROV == 1 and player:getCurrentMission(ROV) == xi.mission.id.rov.RHAPSODIES_OF_VANADIEL and player:getMainLvl()>=3 then
+    if xi.settings.ENABLE_ROV == 1 and player:getCurrentMission(ROV) == xi.mission.id.rov.RHAPSODIES_OF_VANADIEL and player:getMainLvl()>=3 then
         cs = 30035
     end
 
@@ -36,7 +36,7 @@ zone_object.onZoneIn = function(player, prevZone)
 
     -- FIRST LOGIN (START CS)
     if player:getPlaytime(false) == 0 then
-        if NEW_CHARACTER_CUTSCENE == 1 then
+        if xi.settings.NEW_CHARACTER_CUTSCENE == 1 then
             cs = 531
         end
         player:setPos(-40, -5, 80, 64)
@@ -60,17 +60,6 @@ zone_object.onConquestUpdate = function(zone, updatetype)
 end
 
 zone_object.onRegionEnter = function(player, region)
-
-    switch (region:GetRegionID()): caseof
-    {
-        [1] = function (x)  -- Windurst Mission 1-3, final cutscene with Leepe-Hoppe
-            -- If we're on Windurst Mission 1-3
-            if player:getCurrentMission(WINDURST) == xi.mission.id.windurst.THE_PRICE_OF_PEACE and player:getMissionStatus(player:getNation()) == 2 then
-                player:startEvent(146)
-            end
-        end,
-    }
-
 end
 
 zone_object.onEventUpdate = function(player, csid, option)
@@ -79,10 +68,6 @@ end
 zone_object.onEventFinish = function(player, csid, option)
     if csid == 531 then
         player:messageSpecial(ID.text.ITEM_OBTAINED, 536)
-    elseif csid == 146 then -- Returned from Giddeus, Windurst 1-3
-        player:setMissionStatus(player:getNation(), 3)
-        player:setCharVar("ghoo_talk", 0)
-        player:setCharVar("laa_talk", 0)
     elseif csid == 30035 then
         player:completeMission(xi.mission.log_id.ROV, xi.mission.id.rov.RHAPSODIES_OF_VANADIEL)
         player:addMission(xi.mission.log_id.ROV, xi.mission.id.rov.RESONACE)

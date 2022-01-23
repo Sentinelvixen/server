@@ -24,6 +24,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 
 #include "../../common/cbasetypes.h"
 #include "../../common/mmo.h"
+#include "../event_info.h"
 
 #include <bitset>
 #include <deque>
@@ -50,25 +51,6 @@ struct jobs_t
     uint8  genkai;           // the maximum genkai level achieved
 };
 
-struct event_t
-{
-    int32 EventID;
-    int32 Option; // dummy return result
-
-    CBaseEntity* Target; // event initiator
-
-    // TODO: Change this to something more descriptive
-    string_t Script; // path to the file responsible for handling the event
-
-    void reset()
-    {
-        EventID = -1;
-        Option  = 0;
-        Target  = 0;
-        Script.clear();
-    }
-};
-
 struct profile_t
 {
     uint8      nation;     // your nation alligeance
@@ -76,7 +58,7 @@ struct profile_t
     uint16     title;      // звание
     uint16     fame[15];   // известность
     uint8      rank[3];    // рагн в трех государствах
-    uint32     rankpoints; // очки ранга в трех государствах
+    uint16     rankpoints; // очки ранга в трех государствах
     location_t home_point; // точка возрождения персонажа
     uint8      campaign_allegiance;
     uint8      unity_leader;
@@ -221,9 +203,13 @@ class CCharEntity : public CBattleEntity
 public:
     jobs_t     jobs;       // доступрые профессии персонажа
     keyitems_t keys;       // таблица ключевых предметов
-    event_t    m_event;    // структура для запуска событый
-    bool       inSequence; // True if the player is locked in a NPC sequence
-    bool       gotMessage; // Used to let the interaction framework know that a message outside of it was triggered.
+
+    EventPrep* eventPreparation;      // Information about a potential upcoming event
+    EventInfo* currentEvent;          // The currently ongoing event playing for the player
+    std::list<EventInfo*> eventQueue; // The queued events to play for the player
+    bool       inSequence;            // True if the player is locked in a NPC sequence
+    bool       gotMessage;            // Used to let the interaction framework know that a message outside of it was triggered.
+
     skills_t   RealSkills; // структура всех реальных умений персонажа, с точностью до 0.1 и не ограниченных уровнем
 
     nameflags_t nameflags;           // флаги перед именем персонажа
@@ -263,6 +249,7 @@ public:
     void              setPetZoningInfo();            // set pet zoning info (when zoning and logging out)
     void              resetPetZoningInfo();          // reset pet zoning info (when changing job ect)
     uint8             m_SetBlueSpells[20];           // The 0x200 offsetted blue magic spell IDs which the user has set. (1 byte per spell)
+    uint32            m_FieldChocobo;
 
     UnlockedAttachments_t m_unlockedAttachments; // Unlocked Automaton Attachments (1 bit per attachment)
     CAutomatonEntity*     PAutomaton;            // Automaton statistics
@@ -385,9 +372,6 @@ public:
 
     int8 getShieldSize();
 
-    bool getWeaponSkillKill() const;
-    void setWeaponSkillKill(bool isWeaponSkillKill);
-
     bool getStyleLocked() const;
     void setStyleLocked(bool isStyleLocked);
     bool getBlockingAid() const;
@@ -443,6 +427,11 @@ public:
 
     bool isInEvent();
     bool isNpcLocked();
+    void queueEvent(EventInfo* eventToQueue);
+    void endCurrentEvent();
+    void tryStartNextEvent();
+    void skipEvent();
+    void setLocked(bool locked);
 
     void SetMoghancement(uint16 moghancementID);
     bool hasMoghancement(uint16 moghancementID) const;
@@ -464,6 +453,8 @@ public:
     virtual void           OnDeathTimer() override;
     virtual void           OnRaise() override;
     virtual void           OnItemFinish(CItemState&, action_t&);
+
+    bool m_Locked; // Is the player locked in a cutscene
 
     CCharEntity();  // constructor
     ~CCharEntity(); // destructor
@@ -487,7 +478,6 @@ private:
     std::unique_ptr<CItemContainer> m_Wardrobe3;
     std::unique_ptr<CItemContainer> m_Wardrobe4;
 
-    bool m_isWeaponSkillKill;
     bool m_isStyleLocked;
     bool m_isBlockingAid;
     bool m_reloadParty;

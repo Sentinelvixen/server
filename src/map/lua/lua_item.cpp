@@ -1,4 +1,4 @@
-/*
+﻿/*
 ===========================================================================
 
 Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -21,7 +21,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 
 #include "lua_item.h"
 
-#include "../../common/showmsg.h"
+#include "../../common/logging.h"
 #include "../items/item.h"
 #include "../items/item_equipment.h"
 #include "../items/item_general.h"
@@ -34,7 +34,7 @@ CLuaItem::CLuaItem(CItem* PItem)
 {
     if (PItem == nullptr)
     {
-        ShowError("CLuaItem created with nullptr instead of valid CItem*!\n");
+        ShowError("CLuaItem created with nullptr instead of valid CItem*!");
     }
 }
 
@@ -230,7 +230,7 @@ bool CLuaItem::isTwoHanded()
     }
     else
     {
-        ShowError(CL_RED "CLuaItem::isTwoHanded - not a valid Weapon.\n" CL_RESET);
+        ShowError("CLuaItem::isTwoHanded - not a valid Weapon.");
     }
 
     return false;
@@ -244,7 +244,7 @@ bool CLuaItem::isHandToHand()
     }
     else
     {
-        ShowError(CL_RED "CLuaItem::isHandToHand - not a valid Weapon.\n" CL_RESET);
+        ShowError("CLuaItem::isHandToHand - not a valid Weapon.");
     }
 
     return false;
@@ -258,7 +258,7 @@ bool CLuaItem::isShield()
     }
     else
     {
-        ShowError(CL_RED "CLuaItem::isShield - not a valid Armor.\n" CL_RESET);
+        ShowError("CLuaItem::isShield - not a valid Armor.");
     }
 
     return false;
@@ -280,6 +280,16 @@ auto CLuaItem::getSignature() -> std::string
     return std::string(reinterpret_cast<const char*>(signature));
 }
 
+uint8 CLuaItem::getAppraisalID()
+{
+    return m_PLuaItem->m_extra[0x16];
+}
+
+void CLuaItem::setAppraisalID(uint8 id)
+{
+    m_PLuaItem->m_extra[0x16] = id;
+}
+
 bool CLuaItem::isInstalled()
 {
     if (!m_PLuaItem->isType(ITEM_FURNISHING))
@@ -288,6 +298,25 @@ bool CLuaItem::isInstalled()
     }
     auto* PFurnishing = static_cast<CItemFurnishing*>(m_PLuaItem);
     return PFurnishing->isInstalled();
+}
+
+void CLuaItem::setSoulPlateData(std::string name, uint16 mobFamily, uint8 zeni, uint16 skillIndex, uint8 fp)
+{
+    m_PLuaItem->setSoulPlateData(name, mobFamily, zeni, skillIndex, fp);
+}
+
+auto CLuaItem::getSoulPlateData() -> sol::table
+{
+    auto data        = m_PLuaItem->getSoulPlateData();
+    sol::table table = luautils::lua.create_table();
+
+    table["name"]       = std::get<0>(data);
+    table["mobFamily"]  = std::get<1>(data);
+    table["zeni"]       = std::get<2>(data);
+    table["skillIndex"] = std::get<3>(data);
+    table["fp"]         = std::get<4>(data);
+
+    return table;
 }
 
 //==========================================================//
@@ -321,7 +350,17 @@ void CLuaItem::Register()
     SOL_REGISTER("isHandToHand", CLuaItem::isHandToHand);
     SOL_REGISTER("isShield", CLuaItem::isShield);
     SOL_REGISTER("getSignature", CLuaItem::getSignature);
+    SOL_REGISTER("getAppraisalID", CLuaItem::getAppraisalID);
+    SOL_REGISTER("setAppraisalID", CLuaItem::setAppraisalID);
     SOL_REGISTER("isInstalled", CLuaItem::isInstalled);
+    SOL_REGISTER("setSoulPlateData", CLuaItem::setSoulPlateData);
+    SOL_REGISTER("getSoulPlateData", CLuaItem::getSoulPlateData);
+}
+
+std::ostream& operator<<(std::ostream& os, const CLuaItem& item)
+{
+    std::string id = item.m_PLuaItem ? std::to_string(item.m_PLuaItem->getID()) : "nullptr";
+    return os << "CLuaItem(" << id << ")";
 }
 
 //======================================================//

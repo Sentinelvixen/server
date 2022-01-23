@@ -1,7 +1,5 @@
 -----------------------------------
---
 -- Zone: Konschtat_Highlands (108)
---
 -----------------------------------
 local ID = require("scripts/zones/Konschtat_Highlands/IDs")
 require("scripts/quests/i_can_hear_a_rainbow")
@@ -9,6 +7,7 @@ require("scripts/globals/chocobo_digging")
 require("scripts/globals/conquest")
 require("scripts/globals/missions")
 require("scripts/globals/chocobo")
+require("scripts/missions/amk/helpers")
 -----------------------------------
 local zone_object = {}
 
@@ -30,8 +29,11 @@ zone_object.onZoneIn = function( player, prevZone)
 
     if quests.rainbow.onZoneIn(player) then
         cs = 104
-    elseif player:getCurrentMission(WINDURST) == xi.mission.id.windurst.VAIN and player:getMissionStatus(player:getNation()) == 1 then
-        cs = 106
+    end
+
+    -- AMK06/AMK07
+    if xi.settings.ENABLE_AMK == 1 then
+        xi.amk.helpers.tryRandomlyPlaceDiggingLocation(player)
     end
 
     return cs
@@ -47,12 +49,6 @@ end
 zone_object.onEventUpdate = function( player, csid, option)
     if csid == 104 then
         quests.rainbow.onEventUpdate(player)
-    elseif csid == 106 then
-        if player:getZPos() > 855 then
-            player:updateEvent(0, 0, 0, 0, 0, 2)
-        elseif player:getXPos() > 32 and player:getXPos() < 370 then
-            player:updateEvent(0, 0, 0, 0, 0, 1)
-        end
     end
 end
 

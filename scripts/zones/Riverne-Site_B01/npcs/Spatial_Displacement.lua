@@ -12,13 +12,13 @@ end
 entity.onTrigger = function(player, npc)
     local offset = npc:getID() - ID.npc.DISPLACEMENT_OFFSET
     if offset >= 0 and offset <= 31 then
-        player:startEvent(offset + 2)
+        player:startOptionalCutscene(offset + 2)
     elseif offset == 34 then
-        player:startEvent(22)
+        player:startOptionalCutscene(22)
     elseif offset == 35 then
-        player:startEvent(32003)
+        player:startOptionalCutscene(32003)
     elseif offset > 35 and offset <= 41 then
-        player:startEvent(offset)
+        player:startOptionalCutscene(offset)
     end
 end
 
@@ -34,7 +34,7 @@ entity.onEventFinish = function(player, csid, option)
         -- TODO: Go! Go! Gobmuffin quest. Player just ported to J-6 island
     elseif csid == 32003 then
         EventFinishBCNM(player, csid, option)
-        if ENABLE_COP_ZONE_CAP == 1 and option == 4 then
+        if xi.settings.ENABLE_COP_ZONE_CAP == 1 and option == 4 then
             player:addStatusEffect(xi.effect.LEVEL_RESTRICTION, 50, 0, 0)
         end
     end

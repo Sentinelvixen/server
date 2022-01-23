@@ -98,11 +98,33 @@ bool CMagicState::Update(time_point tick)
 
         action_t action;
 
-        if (!PTarget || m_errorMsg ||
-            (HasMoved() && (m_PEntity->objtype != TYPE_PET || static_cast<CPetEntity*>(m_PEntity)->getPetType() != PET_TYPE::AUTOMATON)) ||
-            !CanCastSpell(PTarget))
+        if (!PTarget || m_errorMsg || !CanCastSpell(PTarget) ||
+            (HasMoved() && (m_PEntity->objtype != TYPE_PET || static_cast<CPetEntity*>(m_PEntity)->getPetType() != PET_TYPE::AUTOMATON)))
         {
             m_interrupted = true;
+        }
+        else if (PTarget->objtype == TYPE_PC)
+        {
+            CCharEntity* PChar = dynamic_cast<CCharEntity*>(PTarget);
+            if (PChar->m_Locked)
+            {
+                m_interrupted = true;
+            }
+        }
+        else if (PTarget->objtype == TYPE_PET)
+        {
+            CPetEntity*  PPet  = dynamic_cast<CPetEntity*>(PTarget);
+            CCharEntity* PChar = dynamic_cast<CCharEntity*>(PPet->PMaster);
+
+            if (PChar == nullptr)
+            {
+                return false;
+            }
+
+            if (PChar->m_Locked)
+            {
+                m_interrupted = true;
+            }
         }
         else if (battleutils::IsParalyzed(m_PEntity))
         {
@@ -236,7 +258,7 @@ bool CMagicState::HasCost()
     {
         if (m_PEntity->objtype == TYPE_MOB && m_PEntity->health.maxmp == 0)
         {
-            ShowWarning("CMagicState::ValidCast Mob (%u) tried to cast magic with no mp!\n", m_PEntity->id);
+            ShowWarning("CMagicState::ValidCast Mob (%u) tried to cast magic with no mp!", m_PEntity->id);
         }
         m_errorMsg = std::make_unique<CMessageBasicPacket>(m_PEntity, m_PEntity, static_cast<uint16>(m_PSpell->getID()), 0, MSGBASIC_NOT_ENOUGH_MP);
         return false;

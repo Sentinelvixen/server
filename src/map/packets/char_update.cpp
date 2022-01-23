@@ -19,7 +19,7 @@
 ===========================================================================
 */
 
-#include "../../common/showmsg.h"
+#include "../../common/logging.h"
 #include "../../common/socket.h"
 
 #include <cstring>
@@ -69,7 +69,7 @@ CCharUpdatePacket::CCharUpdatePacket(CCharEntity* PChar)
     ref<uint8>(0x29) = PChar->GetGender() + (PChar->look.size > 0 ? PChar->look.size * 8 : 2); // + model sizing : 0x02 - 0; 0x08 - 1; 0x10 - 2;
     ref<uint8>(0x2C) = PChar->GetSpeed();
     ref<uint16>(0x2E) |= PChar->speedsub << 1; // Not sure about this, it was a work around when we set speedsub incorrectly..
-    ref<uint8>(0x30) = PChar->m_event.EventID != -1 ? ANIMATION_EVENT : PChar->animation;
+    ref<uint8>(0x30) = PChar->isInEvent() ? ANIMATION_EVENT : PChar->animation;
 
     CItemLinkshell* linkshell = (CItemLinkshell*)PChar->getEquip(SLOT_LINK1);
 
@@ -120,8 +120,9 @@ CCharUpdatePacket::CCharUpdatePacket(CCharEntity* PChar)
         ref<uint8>(0x58) += 0x80;
     }
 
-    if (PChar->animation == ANIMATION_MOUNT)
+    if (PChar->StatusEffectContainer->HasStatusEffect(EFFECT_MOUNTED))
     {
+        ref<uint8>(0x29) |= static_cast<uint8>(PChar->StatusEffectContainer->GetStatusEffect(EFFECT_MOUNTED)->GetSubPower());
         ref<uint16>(0x5B) = PChar->StatusEffectContainer->GetStatusEffect(EFFECT_MOUNTED)->GetPower();
     }
 }

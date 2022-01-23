@@ -257,12 +257,12 @@ void CSpell::setBase(uint16 base)
     m_base = base;
 }
 
-uint8 CSpell::getValidTarget() const
+uint16 CSpell::getValidTarget() const
 {
     return m_ValidTarget;
 }
 
-void CSpell::setValidTarget(uint8 ValidTarget)
+void CSpell::setValidTarget(uint16 ValidTarget)
 {
     m_ValidTarget = ValidTarget;
 }
@@ -483,14 +483,58 @@ namespace spell
                 PSpellList[static_cast<uint16>(PSpell->getID())] = PSpell;
 
                 auto filename = fmt::format("./scripts/globals/spells/{}.lua", PSpell->getName());
-                if (PSpell->getSpellGroup() == SPELLGROUP_BLUE)
+
+                std::string switchKey = "";
+                switch (PSpell->getSpellGroup())
                 {
-                    filename = fmt::format("./scripts/globals/spells/bluemagic/{}.lua", PSpell->getName());
+                    case SPELLGROUP_WHITE:
+                    {
+                        switchKey = "white";
+                    }
+                    break;
+                    case SPELLGROUP_BLACK:
+                    {
+                        switchKey = "black";
+                    }
+                    break;
+                    case SPELLGROUP_SONG:
+                    {
+                        switchKey = "songs";
+                    }
+                    break;
+                    case SPELLGROUP_NINJUTSU:
+                    {
+                        switchKey = "ninjutsu";
+                    }
+                    break;
+                    case SPELLGROUP_SUMMONING:
+                    {
+                        switchKey = "summoning";
+                    }
+                    break;
+                    case SPELLGROUP_BLUE:
+                    {
+                        switchKey = "blue";
+                    }
+                    break;
+                    case SPELLGROUP_GEOMANCY:
+                    {
+                        switchKey = "geomancy";
+                    }
+                    break;
+                    case SPELLGROUP_TRUST:
+                    {
+                        switchKey = "trust";
+                    }
+                    break;
+                    default:
+                    {
+                        ShowError("spell::LoadSpellList: Spell %s doesnt have a SpellGroup", PSpell->getName());
+                    }
+                    break;
                 }
-                else if (PSpell->getSpellGroup() == SPELLGROUP_TRUST)
-                {
-                    filename = fmt::format("./scripts/globals/spells/trust/{}.lua", PSpell->getName());
-                }
+                filename = fmt::format("./scripts/globals/spells/{}/{}.lua", switchKey, PSpell->getName());
+
                 luautils::CacheLuaObjectFromFile(filename);
             }
         }
@@ -519,7 +563,7 @@ namespace spell
 
                 if (PSpellList[spellId] == nullptr)
                 {
-                    ShowWarning("spell::LoadSpellList Tried to load nullptr blue spell (%u)\n", spellId);
+                    ShowWarning("spell::LoadSpellList Tried to load nullptr blue spell (%u)", spellId);
                     continue;
                 }
 

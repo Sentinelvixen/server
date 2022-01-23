@@ -20,22 +20,13 @@ function onMobDeathEx(mob, player, isKiller, isWeaponSkillKill)
     if isKiller then
         -- DRK quest - Blade Of Darkness
         if
-            (player:getQuestStatus(xi.quest.log_id.BASTOK, xi.quest.id.bastok.BLADE_OF_DARKNESS) == QUEST_ACCEPTED or player:getQuestStatus(xi.quest.log_id.BASTOK, xi.quest.id.bastok.BLADE_OF_DEATH) == QUEST_ACCEPTED) and
+            (player:getQuestStatus(xi.quest.log_id.BASTOK, xi.quest.id.bastok.BLADE_OF_DARKNESS) == QUEST_ACCEPTED or
+            player:getQuestStatus(xi.quest.log_id.BASTOK, xi.quest.id.bastok.BLADE_OF_DEATH) == QUEST_ACCEPTED) and
             player:getEquipID(xi.slot.MAIN) == 16607 and
             player:getCharVar("ChaosbringerKills") < 200 and
             not isWeaponSkillKill
         then
             player:addCharVar("ChaosbringerKills", 1)
-        end
-    end
-
-    -- Things that happen to any player in the party/alliance
-    if player:getCurrentMission(WINDURST) == xi.mission.id.windurst.A_TESTING_TIME then
-        if
-            (player:getZoneID() == xi.zone.BUBURIMU_PENINSULA and player:hasCompletedMission(xi.mission.log_id.WINDURST, xi.mission.id.windurst.A_TESTING_TIME)) or
-            (player:getZoneID() == xi.zone.TAHRONGI_CANYON and not player:hasCompletedMission(xi.mission.log_id.WINDURST, xi.mission.id.windurst.A_TESTING_TIME))
-        then
-            player:addCharVar("testingTime_crea_count", 1)
         end
     end
 
@@ -62,12 +53,12 @@ end
 xi.mob.phOnDespawn = function(ph, phList, chance, cooldown, immediate)
     if type(immediate) ~= "boolean" then immediate = false end
 
-    if NM_LOTTERY_CHANCE then
-        chance = NM_LOTTERY_CHANCE >= 0 and (chance * NM_LOTTERY_CHANCE) or 100
+    if xi.settings.NM_LOTTERY_CHANCE then
+        chance = xi.settings.NM_LOTTERY_CHANCE >= 0 and (chance * xi.settings.NM_LOTTERY_CHANCE) or 100
     end
 
-    if NM_LOTTERY_COOLDOWN then
-        cooldown = NM_LOTTERY_COOLDOWN >= 0 and (cooldown * NM_LOTTERY_COOLDOWN) or cooldown
+    if xi.settings.NM_LOTTERY_COOLDOWN then
+        cooldown = xi.settings.NM_LOTTERY_COOLDOWN >= 0 and (cooldown * xi.settings.NM_LOTTERY_COOLDOWN) or cooldown
     end
 
     local phId = ph:getID()
@@ -141,6 +132,7 @@ xi.mob.additionalEffect =
     STUN       = 19,
     TERROR     = 20,
     TP_DRAIN   = 21,
+    WEIGHT     = 22,
 }
 xi.mob.ae = xi.mob.additionalEffect
 
@@ -386,6 +378,19 @@ local additionalEffects =
         bonusAbilityParams = {bonusmab = 0, includemab = false},
         code = function(mob, target, power) local tp = math.min(power, target:getTP()) target:delTP(tp) mob:addTP(tp) end,
     },
+    [xi.mob.ae.WEIGHT] =
+    {
+        chance = 25,
+        ele = xi.magic.ele.WIND,
+        sub = xi.subEffect.BLIND, -- TODO
+        msg = xi.msg.basic.ADD_EFFECT_STATUS,
+        applyEffect = true,
+        eff = xi.effect.WEIGHT,
+        power = 1,
+        duration = 30,
+        minDuration = 1,
+        maxDuration = 45,
+    },
 }
 
 --[[
@@ -432,13 +437,7 @@ xi.mob.onAddEffect = function(mob, target, damage, effect, params)
                         duration = duration - dLevel
                     end
 
-                    if ae.minDuration and duration < ae.minDuration then
-                        duration = ae.minDuration
-                    elseif ae.maxDuration and duration > ae.maxDuration then
-                        duration = ae.maxDuration
-                    end
-
-                    duration = duration * resist
+                    duration = utils.clamp(duration, ae.minDuration, ae.maxDuration) * resist
 
                     target:addStatusEffect(ae.eff, power, tick, duration)
 
@@ -472,7 +471,9 @@ xi.mob.onAddEffect = function(mob, target, damage, effect, params)
                 power = addBonusesAbility(mob, ae.ele, target, power, ae.bonusAbilityParams)
                 power = power * applyResistanceAddEffect(mob, target, ae.ele, 0)
                 power = adjustForTarget(target, power, ae.ele)
-                power = finalMagicNonSpellAdjustments(mob, target, ae.ele, power)
+                if ae.sub ~= xi.subEffect.TP_DRAIN and ae.sub ~= xi.subEffect.MP_DRAIN then
+                    power = finalMagicNonSpellAdjustments(mob, target, ae.ele, power)
+                end
 
                 -- target:PrintToPlayer(string.format("Adjusted Power: %f", power)) -- DEBUG
 

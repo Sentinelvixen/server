@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `mob_skill_lists` (
   `skill_list_id` smallint(5) unsigned NOT NULL,
   `mob_skill_id` smallint(3) unsigned NOT NULL,
   PRIMARY KEY (`skill_list_id`,`mob_skill_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Contenu de la table `mob_skill_lists`
@@ -761,13 +761,18 @@ INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1731);
 INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1732);
 INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1733);
 INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1734);
--- INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1735);
--- INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1736);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1735);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1736);
 -- INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1737);
 -- INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1738);
--- INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1839);
--- INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1840);
--- 177: MamoolJa Knight?
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1839);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJa',176,1840);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJaMage',177,1920);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJaMage',177,1921);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJaMage',177,1922);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJaMage',177,1923);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJaMage',177,1924);
+INSERT INTO `mob_skill_lists` VALUES ('MamoolJaMage',177,1925);
 INSERT INTO `mob_skill_lists` VALUES ('Mandragora',178,300);
 INSERT INTO `mob_skill_lists` VALUES ('Mandragora',178,301);
 INSERT INTO `mob_skill_lists` VALUES ('Mandragora',178,302);
@@ -806,11 +811,10 @@ INSERT INTO `mob_skill_lists` VALUES ('Moblin',184,1086);
 INSERT INTO `mob_skill_lists` VALUES ('Moblin',184,1087);
 INSERT INTO `mob_skill_lists` VALUES ('Moblin',184,1088);
 -- 185: Moogle
-INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,316);
-INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,317);
-INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,319);
-INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,320);
--- INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,726);
+INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,316); -- Impale
+INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,317); -- Vampiric Lash
+INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,319); -- Bad Breath
+INSERT INTO `mob_skill_lists` VALUES ('Morbol',186,320); -- Sweet Breath
 INSERT INTO `mob_skill_lists` VALUES ('Murex',187,2629);
 -- INSERT INTO `mob_skill_lists` VALUES ('Murex',187,2630);
 INSERT INTO `mob_skill_lists` VALUES ('Opo-opo',188,288);
@@ -1089,10 +1093,10 @@ INSERT INTO `mob_skill_lists` VALUES ('Tonberry_no_rancor',244,786);
 INSERT INTO `mob_skill_lists` VALUES ('Tonberry_no_rancor',244,787);
 INSERT INTO `mob_skill_lists` VALUES ('Tonberry_no_rancor',244,788);
 INSERT INTO `mob_skill_lists` VALUES ('Tonberry_no_rancor',244,920);
-INSERT INTO `mob_skill_lists` VALUES ('Treant',245,328);
-INSERT INTO `mob_skill_lists` VALUES ('Treant',245,329);
-INSERT INTO `mob_skill_lists` VALUES ('Treant',245,331);
-INSERT INTO `mob_skill_lists` VALUES ('Treant',245,332);
+INSERT INTO `mob_skill_lists` VALUES ('Treant',245,328); -- drill_branch
+INSERT INTO `mob_skill_lists` VALUES ('Treant',245,329); -- pinecone_bomb
+INSERT INTO `mob_skill_lists` VALUES ('Treant',245,331); -- leafstorm
+INSERT INTO `mob_skill_lists` VALUES ('Treant',245,332); -- entangle
 -- INSERT INTO `mob_skill_lists` VALUES ('Troll',246,1741);
 -- INSERT INTO `mob_skill_lists` VALUES ('Troll',246,1742);
 INSERT INTO `mob_skill_lists` VALUES ('Troll',246,1743);
@@ -1123,12 +1127,13 @@ INSERT INTO `mob_skill_lists` VALUES ('Wamoura',253,1953);
 INSERT INTO `mob_skill_lists` VALUES ('Wamoura',253,1954);
 INSERT INTO `mob_skill_lists` VALUES ('Wamoura',253,1955);
 -- INSERT INTO `mob_skill_lists` VALUES ('Wamoura',253,1956);
-INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa',254,1815);
-INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa',254,1816);
-INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa',254,1817);
-INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa',254,1818);
-INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa',254,1819);
--- INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa',254,1820);
+INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa_strech',254,1815);
+INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa_strech',254,1816);
+INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa_strech',254,1817);
+INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa_strech',254,1819); -- Heat Barrier
+INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa_strech',254,1820);
+INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa_curl',1162,1818); -- Cannonball
+INSERT INTO `mob_skill_lists` VALUES ('Wamouracampa_curl',1162,1819); -- Heat Barrier
 INSERT INTO `mob_skill_lists` VALUES ('Wanderer',255,388);
 INSERT INTO `mob_skill_lists` VALUES ('Wanderer',255,389);
 INSERT INTO `mob_skill_lists` VALUES ('Wanderer',255,390);
@@ -3490,7 +3495,11 @@ INSERT INTO `mob_skill_lists` VALUES ('TRUST_Valaineral',1025,41);  -- Swift Bla
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Valaineral',1025,42);  -- Savage Blade
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Valaineral',1025,238); -- Uriel Blade
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Joachim',1026,0);
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Naja_Salaheem',1026,0);
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Naja_Salaheem',1027,166); -- True Strike
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Naja_Salaheem',1027,168); -- Hexa Strike
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Naja_Salaheem',1027,169); -- Black Halo
+-- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Naja_Salaheem',1027,0); -- TODO: Justice Breaker
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Naja_Salaheem',1027,3215); -- Peacebreaker
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Prishe',1028,3234); -- Nullifying Dropkick
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Prishe',1028,3235); -- Auroral Uppercut
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Prishe',1028,3236); -- Knuckle Sandwich
@@ -3502,9 +3511,15 @@ INSERT INTO `mob_skill_lists` VALUES ('TRUST_Iron_Eater',1032,83); -- Armor Brea
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Iron_Eater',1032,88); -- Steel Cyclone
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Gessho',1033,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Gadalar',1034,0);
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Rainemard',1035,0);
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Rainemard',1035,33); -- Burning Blade
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Rainemard',1035,34); -- Red Lotus Blade
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Rainemard',1035,40); -- Vorpal Blade
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Rainemard',1035,42); -- Savage Blade
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Ingrid',1036,0);
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Lehko_Habhoka',1037,0);
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Lehko_Habhoka',1037,3230); -- Inspirit
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Lehko_Habhoka',1037,3231); -- Debonair Rush
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Lehko_Habhoka',1037,3232); -- Iridal Pierce
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Lehko_Habhoka',1037,3233); -- Lunar Revolution
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Nashmeira',1038,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Zazarg',1039,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Ovjang',1040,0);
@@ -3515,16 +3530,12 @@ INSERT INTO `mob_skill_lists` VALUES ('TRUST_Iron_Eater',1032,88); -- Steel Cycl
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Aldo',1045,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Moogle',1046,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Fablinix',1047,0);
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,0); -- Combo (Maat)
-INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,1028); -- Shoulder Tackle (Maat)
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,0); -- One Inch Punch (Maat)
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,0); -- Backhand Blow (Maat)
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,0); -- Raging Fists (Maat)
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,0); -- Spinning Attack (Maat)
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,0); -- Howling Fist (Maat)
-INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,1033); -- Dragon Kick (Maat)
-INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,1034); -- Asuran Fists (Maat)
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,0); -- TODO: Bear Killer
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,3263); -- Bear Killer
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,3413); -- Combo (Maat)
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,3414); -- One Inch Punch (Maat)
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,3415); -- Howling Fist (Maat)
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,3416); -- Dragon Kick (Maat)
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Maat',1048,3417); -- Asuran Fists (Maat)
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_D_Shantotto',1049,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Star_Sibyl',1050,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Karaha-Baruha',1051,0);
@@ -3541,7 +3552,7 @@ INSERT INTO `mob_skill_lists` VALUES ('TRUST_Semih_Lafihna',1055,3490); -- Stell
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Ferreous_Coffin',1059,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Lilisette',1060,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Mumor',1061,0);
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Uka_Totlihn',1062,0);
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Uka_Totlihn',1062,167); -- Judgement
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Klara',1063,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Romaa_Mihgo',1064,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Kuyin_Hathdenna',1065,0);
@@ -3561,7 +3572,10 @@ INSERT INTO `mob_skill_lists` VALUES ('TRUST_Semih_Lafihna',1055,3490); -- Stell
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Lhe_Lhangavo',1079,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Arciela',1080,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Mayakov',1081,0);
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Qultada',1082,0);
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Qultada',1082,33);  -- Burning Blade
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Qultada',1082,42);  -- Savage Blade
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Qultada',1082,210); -- Sniper Shot
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Qultada',1082,215); -- Detonator
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Adelheid',1083,3466); -- Paralyzing Microtube
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Adelheid',1083,3467); -- Silencing Microtube
 INSERT INTO `mob_skill_lists` VALUES ('TRUST_Adelheid',1083,3468); -- Binding Microtube
@@ -3630,7 +3644,10 @@ INSERT INTO `mob_skill_lists` VALUES ('TRUST_Zied_II',1125,56); -- Ground Strike
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Ingrid_II',1131,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Arciela_II',1132,0);
 -- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Iroha_II',1133,0);
--- INSERT INTO `mob_skill_lists` VALUES ('TRUST_Shantotto_II',1134,0);
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Shantotto_II',1134,3740); -- final_exam
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Shantotto_II',1134,3741); -- doctors_orders
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Shantotto_II',1134,3742); -- empirical_research
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Shantotto_II',1134,3743); -- lesson_in_pain
 -- Reserved for future Trust 6020 (ID: 1135)
 -- Reserved for future Trust 6021 (ID: 1136)
 -- Reserved for future Trust 6022 (ID: 1137)
@@ -3722,4 +3739,39 @@ INSERT INTO `mob_skill_lists` VALUES ('LordRuthen',1155,2111);
 INSERT INTO `mob_skill_lists` VALUES ('LordRuthen',1155,2388);
 INSERT INTO `mob_skill_lists` VALUES ('LordRuthen',1155,2534);
 
--- Next available ID: 1149
+INSERT INTO `mob_skill_lists` VALUES ('Galarhigg',1156,624); -- vulture_1
+INSERT INTO `mob_skill_lists` VALUES ('Galarhigg',1156,625); -- vulture_2
+INSERT INTO `mob_skill_lists` VALUES ('Galarhigg',1156,626); -- vulture_3
+INSERT INTO `mob_skill_lists` VALUES ('Galarhigg',1156,627); -- vulture_4
+
+INSERT INTO `mob_skill_lists` VALUES ('Evil_Oscar',1157,317); -- Vampiric Lash
+INSERT INTO `mob_skill_lists` VALUES ('Evil_Oscar',1157,320); -- Sweet Breath
+
+INSERT INTO `mob_skill_lists` VALUES ('The_Keeper',1158,19); -- Gust Slash
+INSERT INTO `mob_skill_lists` VALUES ('The_Keeper',1158,30); -- Aeolian Edge
+INSERT INTO `mob_skill_lists` VALUES ('Mistdagger',1159,131); -- Blade: To
+INSERT INTO `mob_skill_lists` VALUES ('Mistdagger',1159,134); -- Blade: Jin
+INSERT INTO `mob_skill_lists` VALUES ('Mistdagger',1159,136); -- Blade: Ku
+INSERT INTO `mob_skill_lists` VALUES ('The_Briars_elv',1160,34); -- Red Lotus Blade
+INSERT INTO `mob_skill_lists` VALUES ('The_Briars_elv',1160,40); -- Vorpal Blade
+INSERT INTO `mob_skill_lists` VALUES ('The_Briars_elv',1160,42); -- Savage Blade
+INSERT INTO `mob_skill_lists` VALUES ('The_Briars_gal',1161,86); -- Raging Rush
+INSERT INTO `mob_skill_lists` VALUES ('The_Briars_gal',1161,91); -- Fell Cleave
+
+-- 1162 -> Wamouracampa_curl
+
+INSERT INTO `mob_skill_lists` VALUES ('TRUST_Shantotto_II_Melee',1163,3739); -- shantotto_ii_melee (no name)
+
+-- Next available ID: 1164
+
+-- ------------------------------------------------------------
+-- Start of Ambuscade section
+-- NOTE: The mobs are changed every update in the DATs, so using out-of-date
+--       mob entries will result in the current update's names being shown.
+
+-- April 2021 V1: Meebles
+INSERT INTO `mob_skill_lists` VALUES ('Bozzetto_Breadwinner',30000,3974); -- thrashing_assault
+INSERT INTO `mob_skill_lists` VALUES ('Bozzetto_Breadwinner',30000,3975); -- drill_claw
+
+-- End of Ambuscade section
+-- ------------------------------------------------------------

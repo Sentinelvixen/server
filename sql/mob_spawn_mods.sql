@@ -22,7 +22,7 @@ CREATE TABLE `mob_spawn_mods` (
   `value` smallint(5) NOT NULL DEFAULT '0',
   `is_mob_mod` boolean NOT NULL DEFAULT '0',
   PRIMARY KEY (`mobid`,`modid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=13 PACK_KEYS=1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=13 PACK_KEYS=1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -164,10 +164,6 @@ INSERT INTO `mob_spawn_mods` VALUES (16814432,168,2,0);
 INSERT INTO `mob_spawn_mods` VALUES (16814432,29,33,0);
 INSERT INTO `mob_spawn_mods` VALUES (16921015,387,-95,0); -- Jailer of Fortitude -95% phys damage mods
 INSERT INTO `mob_spawn_mods` VALUES (16921015,390,-95,0);
-INSERT INTO `mob_spawn_mods` VALUES (16921016,60,100,0); -- Kf'ghrah res mods
-INSERT INTO `mob_spawn_mods` VALUES (16921016,61,-100,0);
-INSERT INTO `mob_spawn_mods` VALUES (16921017,60,-100,0);
-INSERT INTO `mob_spawn_mods` VALUES (16921017,61,100,0);
 INSERT INTO `mob_spawn_mods` VALUES (16912838,407,150,0); -- Jailer of Hope fastcast, -ga chance, 2hr/2hr multi
 INSERT INTO `mob_spawn_mods` VALUES (16912838,7,60,1);
 INSERT INTO `mob_spawn_mods` VALUES (16916815,55,300,1);

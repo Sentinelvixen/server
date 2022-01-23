@@ -6,7 +6,7 @@
 -----------------------------------
 require("scripts/globals/quests")
 require("scripts/globals/missions")
-require("scripts/globals/settings")
+require("scripts/settings/main")
 require("scripts/globals/keyitems")
 require("scripts/globals/npc_util")
 -----------------------------------
@@ -15,15 +15,15 @@ local entity = {}
 entity.onTrade = function(player, npc, trade)
     if player:getQuestStatus(xi.quest.log_id.WINDURST, xi.quest.id.windurst.MANDRAGORA_MAD) ~= QUEST_AVAILABLE then
         if npcUtil.tradeHas(trade, 17344, true) then
-            player:startEvent(251, GIL_RATE*200)
+            player:startEvent(251, xi.settings.GIL_RATE*200)
         elseif npcUtil.tradeHas(trade, 934, true) then
-            player:startEvent(252, GIL_RATE*250)
+            player:startEvent(252, xi.settings.GIL_RATE*250)
         elseif npcUtil.tradeHas(trade, 1154, true) then
-            player:startEvent(253, GIL_RATE*1200)
+            player:startEvent(253, xi.settings.GIL_RATE*1200)
         elseif npcUtil.tradeHas(trade, 4369, true) then
-            player:startEvent(254, GIL_RATE*120)
+            player:startEvent(254, xi.settings.GIL_RATE*120)
         elseif npcUtil.tradeHas(trade, 1150, true) then
-            player:startEvent(255, GIL_RATE*5500)
+            player:startEvent(255, xi.settings.GIL_RATE*5500)
         else
             player:startEvent(250)
         end
@@ -36,12 +36,8 @@ entity.onTrigger = function(player, npc)
     local turmoil = player:getQuestStatus(xi.quest.log_id.WINDURST, xi.quest.id.windurst.TORAIMARAI_TURMOIL)
     local MEMORIES_OF_A_MAIDEN = player:getCharVar("MEMORIES_OF_A_MAIDEN_Status")
     local LouverancePath = player:getCharVar("COP_Louverance_s_Path")
-    local missionStatus = player:getMissionStatus(player:getNation())
 
-    --optional windy 9-1
-    if player:getCurrentMission(WINDURST) == xi.mission.id.windurst.DOLL_OF_THE_DEAD and missionStatus == 4 then
-        player:startEvent(439, 0, 17868, 1181)
-    elseif player:getCurrentMission(COP) == xi.mission.id.cop.THE_ROAD_FORKS and MEMORIES_OF_A_MAIDEN == 3 then
+    if player:getCurrentMission(COP) == xi.mission.id.cop.THE_ROAD_FORKS and MEMORIES_OF_A_MAIDEN == 3 then
         player:startEvent(469)
     elseif player:getCurrentMission(COP) == xi.mission.id.cop.THE_ROAD_FORKS and MEMORIES_OF_A_MAIDEN == 6 then
         player:startEvent(470, 0, 587, 581, 586)
@@ -96,27 +92,27 @@ entity.onEventFinish = function(player, csid, option)
         player:setCharVar("COP_Louverance_s_Path", 4)
     elseif csid == 473 then
         player:setCharVar("COP_Ulmia_s_Path", 5)
-    elseif csid == 439 then
-        player:setMissionStatus(player:getNation(), 5)
+
+    -- TODO: This can easily be handled as a table, keyed by csid - 250 when in range
     elseif csid == 251 then
         npcUtil.completeQuest(player, WINDURST, xi.quest.id.windurst.MANDRAGORA_MAD, { fame = 10 })
-        player:addGil(GIL_RATE*200)
+        player:addGil(xi.settings.GIL_RATE*200)
         player:confirmTrade()
     elseif csid == 252 then
         npcUtil.completeQuest(player, WINDURST, xi.quest.id.windurst.MANDRAGORA_MAD, { fame = 25 })
-        player:addGil(GIL_RATE*250)
+        player:addGil(xi.settings.GIL_RATE*250)
         player:confirmTrade()
     elseif csid == 253 then
         npcUtil.completeQuest(player, WINDURST, xi.quest.id.windurst.MANDRAGORA_MAD, { fame = 50 })
-        player:addGil(GIL_RATE*1200)
+        player:addGil(xi.settings.GIL_RATE*1200)
         player:confirmTrade()
     elseif csid == 254 then
         npcUtil.completeQuest(player, WINDURST, xi.quest.id.windurst.MANDRAGORA_MAD, { fame = 10 })
-        player:addGil(GIL_RATE*120)
+        player:addGil(xi.settings.GIL_RATE*120)
         player:confirmTrade()
     elseif csid == 255 then
         npcUtil.completeQuest(player, WINDURST, xi.quest.id.windurst.MANDRAGORA_MAD, { fame = 100 })
-        player:addGil(GIL_RATE*5500)
+        player:addGil(xi.settings.GIL_RATE*5500)
         player:confirmTrade()
     end
 end

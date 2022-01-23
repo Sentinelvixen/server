@@ -41,9 +41,12 @@ public:
         return m_PLuaInstance;
     }
 
-    uint8  getID();
+    friend std::ostream& operator<<(std::ostream& out, const CLuaInstance& instance);
+
+    uint16  getID();
     auto   getName() -> std::string;
     auto   getZone() -> CLuaZone;
+    uint32 getEntranceZoneID();
     auto   getAllies() -> sol::table;
     auto   getChars() -> sol::table;
     auto   getMobs() -> sol::table;
@@ -51,6 +54,7 @@ public:
     auto   getPets() -> sol::table;
     uint32 getTimeLimit();
     auto   getEntryPos() -> sol::table;
+    uint8  getLevelCap();
     uint32 getLastTimeUpdate();
     uint32 getProgress();
     uint32 getWipeTime();

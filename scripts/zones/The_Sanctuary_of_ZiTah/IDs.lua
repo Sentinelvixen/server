@@ -20,29 +20,37 @@ zones[xi.zone.THE_SANCTUARY_OF_ZITAH] =
         NOTHING_OUT_OF_ORDINARY    = 6403,  -- There is nothing out of the ordinary here.
         SENSE_OF_FOREBODING        = 6404,  -- You are suddenly overcome with a sense of foreboding...
         FELLOW_MESSAGE_OFFSET      = 6418,  -- I'm ready. I suppose.
-        CARRIED_OVER_POINTS        = 7000, -- You have carried over <number> login point[/s].
-        LOGIN_CAMPAIGN_UNDERWAY    = 7001, -- The [/January/February/March/April/May/June/July/August/September/October/November/December] <number> Login Campaign is currently underway!<space>
-        LOGIN_NUMBER               = 7002, -- In celebration of your most recent login (login no. <number>), we have provided you with <number> points! You currently have a total of <number> points.
-        CONQUEST_BASE              = 7050,  -- Tallying conquest results...
-        BEASTMEN_BANNER            = 7131,  -- There is a beastmen's banner.
-        CONQUEST                   = 7218,  -- You've earned conquest points!
-        FISHING_MESSAGE_OFFSET     = 7551,  -- You can't fish here.
-        DIG_THROW_AWAY             = 7564,  -- You dig up <item>, but your inventory is full. You regretfully throw the <item> away.
-        FIND_NOTHING               = 7566,  -- You dig and you dig, but find nothing.
-        SOMETHING_BETTER           = 7734,  -- Don't you have something better to do right now?
-        CANNOT_REMOVE_FRAG         = 7737,  -- It is an oddly shaped stone monument. A shining stone is embedded in it, but cannot be removed...
-        ALREADY_OBTAINED_FRAG      = 7738,  -- You have already obtained this monument's <keyitem>. Try searching for another.
-        FOUND_ALL_FRAGS            = 7740,  -- You have obtained <keyitem>! You now have all 8 fragments of light!
-        ZILART_MONUMENT            = 7741,  -- It is an ancient Zilart monument.
-        STURDY_BRANCH              = 7764,  -- It is a beautiful, sturdy branch.
-        SENSE_OMINOUS_PRESENCE     = 7862,  -- You sense an ominous presence...
-        PLAYER_OBTAINS_ITEM        = 8096,  -- <name> obtains <item>!
-        UNABLE_TO_OBTAIN_ITEM      = 8097,  -- You were unable to obtain the item.
-        PLAYER_OBTAINS_TEMP_ITEM   = 8098,  -- <name> obtains the temporary item: <item>!
-        ALREADY_POSSESS_TEMP       = 8099,  -- You already possess that temporary item.
-        NO_COMBINATION             = 8104,  -- You were unable to enter a combination.
-        REGIME_REGISTERED          = 10282, -- New training regime registered!
-        COMMON_SENSE_SURVIVAL      = 12271, -- It appears that you have arrived at a new survival guide provided by the Adventurers' Mutual Aid Network. Common sense dictates that you should now be able to teleport here from similar tomes throughout the world.
+        CARRIED_OVER_POINTS        = 7000,  -- You have carried over <number> login point[/s].
+        LOGIN_CAMPAIGN_UNDERWAY    = 7001,  -- The [/January/February/March/April/May/June/July/August/September/October/November/December] <number> Login Campaign is currently underway!<space>
+        LOGIN_NUMBER               = 7002,  -- In celebration of your most recent login (login no. <number>), we have provided you with <number> points! You currently have a total of <number> points.
+        CONQUEST_BASE              = 7056,  -- Tallying conquest results...
+        BEASTMEN_BANNER            = 7137,  -- There is a beastmen's banner.
+        CONQUEST                   = 7224,  -- You've earned conquest points!
+        FISHING_MESSAGE_OFFSET     = 7557,  -- You can't fish here.
+        DIG_THROW_AWAY             = 7570,  -- You dig up <item>, but your inventory is full. You regretfully throw the <item> away.
+        FIND_NOTHING               = 7572,  -- You dig and you dig, but find nothing.
+        AMK_DIGGING_OFFSET         = 7638,  -- You spot some familiar footprints. You are convinced that your moogle friend has been digging in the immediate vicinity.
+        SOMETHING_BETTER           = 7740,  -- Don't you have something better to do right now?
+        CANNOT_REMOVE_FRAG         = 7743,  -- It is an oddly shaped stone monument. A shining stone is embedded in it, but cannot be removed...
+        ALREADY_OBTAINED_FRAG      = 7744,  -- You have already obtained this monument's <keyitem>. Try searching for another.
+        FOUND_ALL_FRAGS            = 7746,  -- You have obtained <keyitem>! You now have all 8 fragments of light!
+        ZILART_MONUMENT            = 7747,  -- It is an ancient Zilart monument.
+        LOOKS_LIKE_STURDY_BRANCH   = 7769,  -- This looks like a sturdy branch. You will need <item> to cut it off.
+        BEAUTIFUL_STURDY_BRANCH    = 7770,  -- It is a beautiful, sturdy branch.
+        SENSE_STRONG_EVIL_PRESENCE = 7772,  -- You can sense a strong, evil presence!
+        STRANGE_FORCE_PREVENTS     = 7773,  -- Some strange force is preventing you from cutting all the way through.
+        STRANGE_FORCE_VANISHED     = 7774,  -- The strange force has vanished, and <item> has newly sprouted in the cut!
+        NO_LONGER_SENSE_EVIL       = 7775,  -- You no longer sense the evil presence, but there is still a feeling of unrest throughout the forest.
+        NEWLY_SPROUTED_GLOWING     = 7776,  -- The newly sprouted <item> is glowing softly. You no longer feel as if you are being watched.
+        NOT_THE_TIME_FOR_THAT      = 7777,  -- This is not the time for that!
+        SENSE_OMINOUS_PRESENCE     = 7861,  -- You sense an ominous presence...
+        PLAYER_OBTAINS_ITEM        = 8095,  -- <name> obtains <item>!
+        UNABLE_TO_OBTAIN_ITEM      = 8096,  -- You were unable to obtain the item.
+        PLAYER_OBTAINS_TEMP_ITEM   = 8097,  -- <name> obtains the temporary item: <item>!
+        ALREADY_POSSESS_TEMP       = 8098,  -- You already possess that temporary item.
+        NO_COMBINATION             = 8103,  -- You were unable to enter a combination.
+        REGIME_REGISTERED          = 10281, -- New training regime registered!
+        COMMON_SENSE_SURVIVAL      = 12270, -- It appears that you have arrived at a new survival guide provided by the Adventurers' Mutual Aid Network. Common sense dictates that you should now be able to teleport here from similar tomes throughout the world.
     },
     mob =
     {
@@ -63,9 +71,9 @@ zones[xi.zone.THE_SANCTUARY_OF_ZITAH] =
     },
     npc =
     {
-        CASKET_BASE      = 17273337,
-        OVERSEER_BASE    = 17273364, -- Credaurion_RK in npc_list
-        CERMET_HEADSTONE = 17273389,
+        CASKET_BASE      = 17273338,
+        OVERSEER_BASE    = 17273365, -- Credaurion_RK in npc_list
+        CERMET_HEADSTONE = 17273390,
     },
 }
 

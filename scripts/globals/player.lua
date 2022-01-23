@@ -1,10 +1,11 @@
 require("scripts/globals/gear_sets")
 require("scripts/globals/keyitems")
-require("scripts/globals/settings")
+require("scripts/settings/main")
 require("scripts/globals/status")
 require("scripts/globals/teleports")
 require("scripts/globals/titles")
 require("scripts/globals/zone")
+require("scripts/globals/events/login_campaign")
 -----------------------------------
 require("scripts/quests/full_speed_ahead")
 -----------------------------------
@@ -72,26 +73,26 @@ local function CharCreate(player)
     end
 
     -- unlock advanced jobs
-    if ADVANCED_JOB_LEVEL == 0 then
+    if xi.settings.ADVANCED_JOB_LEVEL == 0 then
         for i = xi.job.PLD, xi.job.SCH do
             player:unlockJob(i)
         end
     end
 
     -- unlock subjob
-    if SUBJOB_QUEST_LEVEL == 0 then
+    if xi.settings.SUBJOB_QUEST_LEVEL == 0 then
         player:unlockJob(0)
     end
 
     -- give all maps
-    if ALL_MAPS == 1 then
+    if xi.settings.ALL_MAPS == 1 then
         for i = xi.ki.MAP_OF_THE_SAN_DORIA_AREA, xi.ki.MAP_OF_DIO_ABDHALJS_GHELSBA do
             player:addKeyItem(i)
         end
-        for i = xi.ki.MAP_OF_AL_ZAHBI, xi.ki.MAP_OF_OUTER_RAKAZNAR do
+        for i = xi.ki.MAP_OF_AL_ZAHBI, xi.ki.MAP_OF_RAKAZNAR do
             player:addKeyItem(i)
         end
-        for i = xi.ki.MAP_OF_RALA_WATERWAYS_U, xi.ki.MAP_OF_OUTER_RAKAZNAR_U do
+        for i = xi.ki.MAP_OF_RALA_WATERWAYS_U, xi.ki.MAP_OF_RAKAZNAR_U do
             player:addKeyItem(i)
         end
         for i = xi.ki.MAP_OF_ESCHA_ZITAH, xi.ki.MAP_OF_REISENJIMA do
@@ -100,14 +101,14 @@ local function CharCreate(player)
     end
 
     -- set initial level cap
-    if INITIAL_LEVEL_CAP ~= 50 then
-        player:setLevelCap(INITIAL_LEVEL_CAP)
+    if xi.settings.INITIAL_LEVEL_CAP ~= 50 then
+        player:setLevelCap(xi.settings.INITIAL_LEVEL_CAP)
     end
 
     -- increase starting inventory
-    if START_INVENTORY > 30 then
-        player:changeContainerSize(xi.inv.INVENTORY, START_INVENTORY - 30)
-        player:changeContainerSize(xi.inv.MOGSATCHEL, START_INVENTORY - 30)
+    if xi.settings.START_INVENTORY > 30 then
+        player:changeContainerSize(xi.inv.INVENTORY, xi.settings.START_INVENTORY - 30)
+        player:changeContainerSize(xi.inv.MOGSATCHEL, xi.settings.START_INVENTORY - 30)
     end
 
     --[[
@@ -118,8 +119,8 @@ local function CharCreate(player)
         on servers with very high values of START_GIL, I guess.
     --]]
 
-    if player:getGil() < START_GIL then
-       player:setGil(START_GIL)
+    if player:getGil() < xi.settings.START_GIL then
+       player:setGil(xi.settings.START_GIL)
     end
 
     player:addItem(536) -- adventurer coupon
@@ -128,6 +129,7 @@ local function CharCreate(player)
     player:setCharVar("spokeKindlix", 1) -- Kindlix introduction
     player:setCharVar("spokePyropox", 1) -- Pyropox introduction
     player:setCharVar("TutorialProgress", 1) -- Has not started tutorial
+    player:setCharVar("EinherjarIntro", 1) -- Has not seen Einherjar intro
     player:setNewPlayer(true) -- apply new player flag
 end
 
@@ -191,6 +193,12 @@ xi.player.onGameIn = function(player, firstLogin, zoning)
 
     -- remember time player zoned in (e.g., to support zone-in delays)
     player:setLocalVar("ZoneInTime", os.time())
+
+    -- Slight delay to ensure player is fully logged in
+    player:timer(2500, function(playerArg)
+        -- Login Campaign rewards points once daily
+        xi.events.loginCampaign.onGameIn(playerArg)
+    end)
 end
 
 xi.player.onPlayerLevelUp = function(player)
@@ -203,6 +211,10 @@ xi.player.onPlayerEmote = function(player, emoteId)
     if emoteId == xi.emote.CHEER and player:hasStatusEffect(xi.effect.FULL_SPEED_AHEAD) then
         xi.fsa.onCheer(player)
     end
+end
+
+xi.player.onPlayerVolunteer = function(player, text)
+    --print(string.format("(%s) /volunteer %s", player:getName(), text))
 end
 
 return xi.player

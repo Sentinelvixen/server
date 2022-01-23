@@ -6,7 +6,7 @@
 -- !pos -111 -4 101 240
 -----------------------------------
 local ID = require("scripts/zones/Port_Windurst/IDs")
-require("scripts/globals/settings")
+require("scripts/settings/main")
 require("scripts/globals/titles")
 require("scripts/globals/keyitems")
 require("scripts/globals/missions")
@@ -15,7 +15,6 @@ require("scripts/globals/quests")
 local entity = {}
 
 entity.onTrade = function(player, npc, trade)
-
     if player:getQuestStatus(xi.quest.log_id.WINDURST, xi.quest.id.windurst.MAKING_AMENDS) == QUEST_ACCEPTED then
         if trade:hasItemQty(937, 1) and trade:getItemCount() == 1 then
             player:startEvent(277, 1500)
@@ -29,39 +28,18 @@ entity.onTrade = function(player, npc, trade)
         else
             player:startEvent(260, 0, 17091, 17061, 17053) --Remind player which items are needed ifquest is accepted and items are not traded
         end
-    else
-        player:startEvent(224)
     end
-
 end
 
 entity.onTrigger = function(player, npc)
-
     local MakingAmends = player:getQuestStatus(xi.quest.log_id.WINDURST, xi.quest.id.windurst.MAKING_AMENDS)
     local MakingAmens = player:getQuestStatus(xi.quest.log_id.WINDURST, xi.quest.id.windurst.MAKING_AMENS) --Second quest in series
     local WonderWands = player:getQuestStatus(xi.quest.log_id.WINDURST, xi.quest.id.windurst.WONDER_WANDS) --Third and final quest in series
     local needToZone = player:needToZone()
     local pFame = player:getFameLevel(WINDURST)
 
-        -- ~[ Windurst Mission 6-1 Full Moon Fountain ]~
-    if (player:getCurrentMission(WINDURST) == xi.mission.id.windurst.FULL_MOON_FOUNTAIN and player:getMissionStatus(player:getNation()) == 0) then
-        player:startEvent(456, 0, 248)
-    elseif (player:getCurrentMission(WINDURST) == xi.mission.id.windurst.FULL_MOON_FOUNTAIN and player:getMissionStatus(player:getNation()) == 3) then
-        player:startEvent(457)
-    -- Check if we are on Windurst Mission 1-1
-    elseif (player:getCurrentMission(WINDURST) == xi.mission.id.windurst.THE_HORUTOTO_RUINS_EXPERIMENT) then
-        local missionStatus = player:getMissionStatus(player:getNation())
-        if (missionStatus == 0) then
-            player:startEvent(90)
-        elseif (missionStatus == 1) then
-            player:startEvent(91)
-        elseif (missionStatus == 3) then
-            player:startEvent(94, 0, xi.ki.CRACKED_MANA_ORBS) -- Finish Mission 1-1
-        end
-    elseif (player:getCurrentMission(WINDURST) == xi.mission.id.windurst.TO_EACH_HIS_OWN_RIGHT and player:getMissionStatus(player:getNation()) == 2) then
-        player:startEvent(147)
 -- Begin Making Amends Section
-    elseif (MakingAmends == QUEST_AVAILABLE and pFame >= 2) then
+    if (MakingAmends == QUEST_AVAILABLE and pFame >= 2) then
             player:startEvent(274, 0, 937) -- MAKING AMENDS + ANIMAL GLUE: Quest Start
     elseif (MakingAmends == QUEST_ACCEPTED) then
             player:startEvent(275, 0, 937) -- MAKING AMENDS + ANIMAL GLUE: Quest Objective Reminder
@@ -75,11 +53,7 @@ entity.onTrigger = function(player, npc)
     elseif (WonderWands == QUEST_COMPLETED) then
         if (player:getCharVar("SecondRewardVar") == 1) then
             player:startEvent(267) --Initiates second reward ifWonder Wands has been completed.
-        else
-            player:startEvent(224) --Plays default conversation once all quests in the series have been completed.
         end
-    else
-        player:startEvent(224) --Standard Conversation
     end
 -- End Wonder Wands Section
 end
@@ -88,28 +62,10 @@ entity.onEventUpdate = function(player, csid, option)
 end
 
 entity.onEventFinish = function(player, csid, option)
-
-    if (csid == 90) then
-        player:setMissionStatus(player:getNation(), 1)
-    elseif (csid == 147) then
-        player:setMissionStatus(player:getNation(), 3)
-    elseif (csid == 94) then
-
-        -- Delete the variable(s) that was created for this mission
-        player:setCharVar("Mission_started_from", 0)
-        player:setCharVar("MissionStatus_op1", 0)
-        player:setCharVar("MissionStatus_op2", 0)
-        player:setCharVar("MissionStatus_op3", 0)
-        player:setCharVar("MissionStatus_op4", 0)
-        player:setCharVar("MissionStatus_op5", 0)
-        player:setCharVar("MissionStatus_op6", 0)
-
-        finishMissionTimeline(player, 1, csid, option)
-
-    elseif (csid == 274 and option == 1) then
+    if (csid == 274 and option == 1) then
             player:addQuest(xi.quest.log_id.WINDURST, xi.quest.id.windurst.MAKING_AMENDS)
     elseif (csid == 277) then
-            player:addGil(GIL_RATE*1500)
+            player:addGil(xi.settings.GIL_RATE*1500)
             player:completeQuest(xi.quest.log_id.WINDURST, xi.quest.id.windurst.MAKING_AMENDS)
             player:addFame(WINDURST, 75)
             player:addTitle(xi.title.QUICK_FIXER)
@@ -164,7 +120,7 @@ entity.onEventFinish = function(player, csid, option)
             player:messageSpecial(ID.text.ITEM_CANNOT_BE_OBTAINED, 12750) -- New Moon Armlets
         else
             player:tradeComplete()
-            player:addGil(GIL_RATE*4800)
+            player:addGil(xi.settings.GIL_RATE*4800)
             player:messageSpecial(ID.text.GIL_OBTAINED, 4800)
             player:addItem(12750) -- New Moon Armlets
             player:messageSpecial(ID.text.ITEM_OBTAINED, 12750) -- New Moon Armlets
@@ -172,13 +128,7 @@ entity.onEventFinish = function(player, csid, option)
             player:addTitle(xi.title.DOCTOR_SHANTOTTOS_GUINEA_PIG)
             player:completeQuest(xi.quest.log_id.WINDURST, xi.quest.id.windurst.WONDER_WANDS)
         end
-        -- ~[ Windurst Mission 6-1 Full Moon Fountain ]~
-    elseif (csid == 456) then
-            player:setMissionStatus(player:getNation(), 1)
-            player:addKeyItem(xi.ki.SOUTHWESTERN_STAR_CHARM)
-            player:messageSpecial(ID.text.KEYITEM_OBTAINED, xi.ki.SOUTHWESTERN_STAR_CHARM)
     end
-
 end
 
 return entity

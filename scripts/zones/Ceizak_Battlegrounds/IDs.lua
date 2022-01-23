@@ -17,16 +17,42 @@ zones[xi.zone.CEIZAK_BATTLEGROUNDS] =
         CARRIED_OVER_POINTS     = 7000, -- You have carried over <number> login point[/s].
         LOGIN_CAMPAIGN_UNDERWAY = 7001, -- The [/January/February/March/April/May/June/July/August/September/October/November/December] <number> Login Campaign is currently underway!<space>
         LOGIN_NUMBER            = 7002, -- In celebration of your most recent login (login no. <number>), we have provided you with <number> points! You currently have a total of <number> points.
-        HOMEPOINT_SET           = 7784, -- Home point set!
-        UNCANNY_SENSATION       = 8026, -- You are assaulted by an uncanny sensation.
-        ENERGIES_COURSE         = 8027, -- The arcane energies begin to course within your veins.
-        MYSTICAL_WARMTH         = 8028, -- You feel a mystical warmth welling up inside you!
+        HOMEPOINT_SET           = 7790, -- Home point set!
+        UNCANNY_SENSATION       = 8032, -- You are assaulted by an uncanny sensation.
+        ENERGIES_COURSE         = 8033, -- The arcane energies begin to course within your veins.
+        MYSTICAL_WARMTH         = 8034, -- You feel a mystical warmth welling up inside you!
     },
     mob =
     {
     },
     npc =
     {
+    },
+    reive =
+    {
+        -- Bounding Chapuli (I-8)
+        [1] =
+        {
+            mob =
+            {
+                17846627,
+                17846628,
+                17846629,
+                17846630,
+            },
+            -- Knotted Vines
+            obstacles =
+            {
+                17846624,
+                17846625,
+                17846626,
+            },
+            collision =
+            {
+                17846760,
+                17846761,
+            },
+        },
     },
 }
 

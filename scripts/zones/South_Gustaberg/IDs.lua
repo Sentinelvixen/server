@@ -20,25 +20,25 @@ zones[xi.zone.SOUTH_GUSTABERG] =
         CARRIED_OVER_POINTS      = 7022, -- You have carried over <number> login point[/s].
         LOGIN_CAMPAIGN_UNDERWAY  = 7023, -- The [/January/February/March/April/May/June/July/August/September/October/November/December] <number> Login Campaign is currently underway!<space>
         LOGIN_NUMBER             = 7024, -- In celebration of your most recent login (login no. <number>), we have provided you with <number> points! You currently have a total of <number> points.
-        CONQUEST_BASE            = 7072, -- Tallying conquest results...
-        FISHING_MESSAGE_OFFSET   = 7231, -- You can't fish here.
-        DIG_THROW_AWAY           = 7244, -- You dig up <item>, but your inventory is full. You regretfully throw the <item> away.
-        FIND_NOTHING             = 7246, -- You dig and you dig, but find nothing.
-        MONSTER_TRACKS           = 7401, -- You see monster tracks on the ground.
-        MONSTER_TRACKS_FRESH     = 7402, -- You see fresh monster tracks on the ground.
-        FIRE_GOOD                = 7405, -- The fire seems to be good enough for cooking.
-        FIRE_PUT                 = 7406, -- You put <item> in the fire.
-        FIRE_TAKE                = 7407, -- You take <item> out of the fire.
-        FIRE_LONGER              = 7408, -- It may take a little while more to cook the <item>.
-        MEAT_ALREADY_PUT         = 7409, -- The <item> is already in the fire.
-        ITEMS_ITEMS_LA_LA        = 7524, -- You can hear a strange voice... Items, items, la la la la la
-        GOBLIN_SLIPPED_AWAY      = 7530, -- The Goblin slipped away when you were not looking...
-        PLAYER_OBTAINS_ITEM      = 7544, -- <name> obtains <item>!
-        UNABLE_TO_OBTAIN_ITEM    = 7545, -- You were unable to obtain the item.
-        PLAYER_OBTAINS_TEMP_ITEM = 7546, -- <name> obtains the temporary item: <item>!
-        ALREADY_POSSESS_TEMP     = 7547, -- You already possess that temporary item.
-        NO_COMBINATION           = 7552, -- You were unable to enter a combination.
-        REGIME_REGISTERED        = 9912, -- New training regime registered!
+        CONQUEST_BASE            = 7078, -- Tallying conquest results...
+        FISHING_MESSAGE_OFFSET   = 7237, -- You can't fish here.
+        DIG_THROW_AWAY           = 7250, -- You dig up <item>, but your inventory is full. You regretfully throw the <item> away.
+        FIND_NOTHING             = 7252, -- You dig and you dig, but find nothing.
+        MONSTER_TRACKS           = 7407, -- You see monster tracks on the ground.
+        MONSTER_TRACKS_FRESH     = 7408, -- You see fresh monster tracks on the ground.
+        FIRE_GOOD                = 7411, -- The fire seems to be good enough for cooking.
+        FIRE_PUT                 = 7412, -- You put <item> in the fire.
+        FIRE_TAKE                = 7413, -- You take <item> out of the fire.
+        FIRE_LONGER              = 7414, -- It may take a little while more to cook the <item>.
+        MEAT_ALREADY_PUT         = 7415, -- The <item> is already in the fire.
+        ITEMS_ITEMS_LA_LA        = 7523, -- You can hear a strange voice... Items, items, la la la la la
+        GOBLIN_SLIPPED_AWAY      = 7529, -- The Goblin slipped away when you were not looking...
+        PLAYER_OBTAINS_ITEM      = 7543, -- <name> obtains <item>!
+        UNABLE_TO_OBTAIN_ITEM    = 7544, -- You were unable to obtain the item.
+        PLAYER_OBTAINS_TEMP_ITEM = 7545, -- <name> obtains the temporary item: <item>!
+        ALREADY_POSSESS_TEMP     = 7546, -- You already possess that temporary item.
+        NO_COMBINATION           = 7551, -- You were unable to enter a combination.
+        REGIME_REGISTERED        = 9911, -- New training regime registered!
     },
     mob =
     {
@@ -63,7 +63,7 @@ zones[xi.zone.SOUTH_GUSTABERG] =
     },
     npc =
     {
-        CASKET_BASE = 17216139,
+        CASKET_BASE = 17216140,
     },
 }
 

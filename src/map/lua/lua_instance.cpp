@@ -19,12 +19,13 @@ along with this program.  If not, see http://www.gnu.org/licenses/
 ===========================================================================
 */
 
-#include "../../common/showmsg.h"
+#include "../../common/logging.h"
 #include "../../common/timer.h"
 
 #include "lua_instance.h"
 
 #include "../instance.h"
+#include "../utils/instanceutils.h"
 #include "../utils/mobutils.h"
 #include "lua_baseentity.h"
 #include "luautils.h"
@@ -34,11 +35,11 @@ CLuaInstance::CLuaInstance(CInstance* PInstance)
 {
     if (PInstance == nullptr)
     {
-        ShowError("CLuaInstance created with nullptr instead of valid CInstance*!\n");
+        ShowError("CLuaInstance created with nullptr instead of valid CInstance*!");
     }
 }
 
-uint8 CLuaInstance::getID()
+uint16 CLuaInstance::getID()
 {
     return m_PLuaInstance->GetID();
 }
@@ -51,6 +52,11 @@ std::string CLuaInstance::getName()
 CLuaZone CLuaInstance::getZone()
 {
     return CLuaZone(m_PLuaInstance->GetZone());
+}
+
+uint32 CLuaInstance::getEntranceZoneID()
+{
+    return instanceutils::GetInstanceData(m_PLuaInstance->GetID()).entrance_zone;
 }
 
 sol::table CLuaInstance::getAllies()
@@ -125,6 +131,11 @@ sol::table CLuaInstance::getEntryPos()
     table["rot"] = entry.rotation;
 
     return table;
+}
+
+uint8 CLuaInstance::getLevelCap()
+{
+    return m_PLuaInstance->GetLevelCap();
 }
 
 uint32 CLuaInstance::getLastTimeUpdate()
@@ -231,7 +242,7 @@ std::optional<CLuaBaseEntity> CLuaInstance::insertAlly(uint32 groupid)
         return std::optional<CLuaBaseEntity>(PAlly);
     }
 
-    ShowError(CL_RED "CLuaBattlefield::insertAlly - group ID %u not found!" CL_RESET, groupid);
+    ShowError("CLuaBattlefield::insertAlly - group ID %u not found!", groupid);
     return std::nullopt;
 }
 
@@ -243,6 +254,7 @@ void CLuaInstance::Register()
     SOL_REGISTER("getID", CLuaInstance::getID);
     SOL_REGISTER("getName", CLuaInstance::getName);
     SOL_REGISTER("getZone", CLuaInstance::getZone);
+    SOL_REGISTER("getEntranceZoneID", CLuaInstance::getEntranceZoneID);
     SOL_REGISTER("setLevelCap", CLuaInstance::setLevelCap);
     SOL_REGISTER("getAllies", CLuaInstance::getAllies);
     SOL_REGISTER("getChars", CLuaInstance::getChars);
@@ -251,6 +263,7 @@ void CLuaInstance::Register()
     SOL_REGISTER("getPets", CLuaInstance::getPets);
     SOL_REGISTER("getTimeLimit", CLuaInstance::getTimeLimit);
     SOL_REGISTER("getEntryPos", CLuaInstance::getEntryPos);
+    SOL_REGISTER("getLevelCap", CLuaInstance::getLevelCap);
     SOL_REGISTER("getLastTimeUpdate", CLuaInstance::getLastTimeUpdate);
     SOL_REGISTER("setLastTimeUpdate", CLuaInstance::setLastTimeUpdate);
     SOL_REGISTER("getProgress", CLuaInstance::getProgress);
@@ -267,6 +280,12 @@ void CLuaInstance::Register()
     SOL_REGISTER("insertAlly", CLuaInstance::insertAlly);
     SOL_REGISTER("getLocalVar", CLuaInstance::getLocalVar);
     SOL_REGISTER("setLocalVar", CLuaInstance::setLocalVar);
+}
+
+std::ostream& operator<<(std::ostream& os, const CLuaInstance& instance)
+{
+    std::string id = instance.m_PLuaInstance ? std::to_string(instance.m_PLuaInstance->GetID()) : "nullptr";
+    return os << "CLuaInstance(" << id << ")";
 }
 
 //======================================================//

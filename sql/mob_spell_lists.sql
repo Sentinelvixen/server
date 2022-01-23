@@ -23,7 +23,7 @@ CREATE TABLE `mob_spell_lists` (
   `min_level` tinyint(3) unsigned NOT NULL,
   `max_level` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`spell_list_id`,`spell_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -2724,7 +2724,7 @@ INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,382,65,255);         -
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,383,78,255);         -- Army's Paeon VI
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,386,25,255);         -- Mage's Ballad
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,387,55,255);         -- Mage's Ballad II
-INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,388,80,255);         -- Mage's Ballad III
+INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,388,85,255);         -- Mage's Ballad III
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,399,11,255);         -- Sword Madrigal
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,400,51,255);         -- Blade Madrigal
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Joachim',323,419,29,255);         -- Advancing March
@@ -2741,7 +2741,7 @@ INSERT INTO `mob_spell_lists` VALUES ('TRUST_Prishe',325,4,82,255);            -
 
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Ulmia',326,386,25,255);           -- Mage's Ballad
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Ulmia',326,387,55,255);           -- Mage's Ballad II
-INSERT INTO `mob_spell_lists` VALUES ('TRUST_Ulmia',326,388,80,255);           -- Mage's Ballad III
+INSERT INTO `mob_spell_lists` VALUES ('TRUST_Ulmia',326,388,85,255);           -- Mage's Ballad III
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Ulmia',326,389,1,255);            -- Knight's Minne
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Ulmia',326,390,21,255);           -- Knight's Minne II
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Ulmia',326,391,41,255);           -- Knight's Minne III
@@ -3042,7 +3042,6 @@ INSERT INTO `mob_spell_lists` VALUES ('TRUST_Koru-Moru',364,52,87,255);         
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Koru-Moru',364,56,13,255);         -- Slow
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Koru-Moru',364,57,40,255);         -- Haste
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Koru-Moru',364,79,75,255);         -- Slow II
-INSERT INTO `mob_spell_lists` VALUES ('TRUST_Koru-Moru',364,106,33,255);        -- Phalanx
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Koru-Moru',364,107,75,255);        -- Phalanx II
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Koru-Moru',364,109,41,255);        -- Refresh
 
@@ -3099,6 +3098,7 @@ INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,7,16,255);         
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,8,31,255);         -- Curaga II
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,9,51,255);         -- Curaga III
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,10,71,255);        -- Curaga IV
+INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,11,91,255);        -- Curaga V
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,14,6,255);         -- Poisona
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,15,9,255);         -- Paralyna
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,16,14,255);        -- Blindna
@@ -3116,10 +3116,8 @@ INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,49,37,255);        
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,50,57,255);        -- Shell III
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,51,68,255);        -- Shell IV
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,52,76,255);        -- Shell V
-INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,56,13,255);        -- Slow
+INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,54,28,255);        -- Stoneskin
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,57,40,255);        -- Haste
-INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,58,4,255);         -- Paralyze
-INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,95,32,255);        -- Esuna
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,125,7,255);        -- Protectra
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,126,27,255);       -- Protectra II
 INSERT INTO `mob_spell_lists` VALUES ('TRUST_Apururu_UC',367,127,47,255);       -- Protectra III
@@ -4096,7 +4094,45 @@ INSERT INTO `mob_spell_lists` VALUES ('Yilbegan',454,196,91,91);  -- Thundaga II
 INSERT INTO `mob_spell_lists` VALUES ('Yilbegan',454,366,91,91);  -- Graviga
 INSERT INTO `mob_spell_lists` VALUES ('Yilbegan',454,359,91,91);  -- Silencega
 
--- Next Available: 455
+INSERT INTO `mob_spell_lists` VALUES ('Sapphirine_Quadav_LITD',455,45,1,255); -- Protect III
+INSERT INTO `mob_spell_lists` VALUES ('Sapphirine_Quadav_LITD',455,50,1,255); -- Shell III
+INSERT INTO `mob_spell_lists` VALUES ('Sapphirine_Quadav_LITD',455,53,1,255); -- Blink
+INSERT INTO `mob_spell_lists` VALUES ('Sapphirine_Quadav_LITD',455,55,1,255); -- Aquaveil
+INSERT INTO `mob_spell_lists` VALUES ('Sapphirine_Quadav_LITD',455,57,1,255); -- Haste
+
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,146,1,255); -- Fire III
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,151,1,255); -- Blizzard III
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,156,1,255); -- Aero III
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,161,1,255); -- Stone III
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,171,1,255); -- Water III
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,175,1,255); -- Firaga II
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,180,1,255); -- Blizzaga II
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,185,1,255); -- Aeroga II
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,190,1,255); -- Stonega II
+INSERT INTO `mob_spell_lists` VALUES ('The_Keeper',456,200,1,255); -- Waterga II
+
+INSERT INTO `mob_spell_lists` VALUES ('Mistdagger',457,339,1,255); -- "Utsusemi: Ni
+INSERT INTO `mob_spell_lists` VALUES ('Mistdagger',457,508,1,255); -- "Yurin: Ichi
+INSERT INTO `mob_spell_lists` VALUES ('Mistdagger',457,509,1,255); -- "Kakka: Ichi
+
+INSERT INTO `mob_spell_lists` VALUES ('The_Briars_elv',458,34,1,255); -- Diaga II
+INSERT INTO `mob_spell_lists` VALUES ('The_Briars_elv',458,47,1,255); -- Protect V
+INSERT INTO `mob_spell_lists` VALUES ('The_Briars_elv',458,52,1,255); -- Shell V
+INSERT INTO `mob_spell_lists` VALUES ('The_Briars_elv',458,57,1,255); -- Haste
+INSERT INTO `mob_spell_lists` VALUES ('The_Briars_elv',458,79,1,255); -- Slow II
+INSERT INTO `mob_spell_lists` VALUES ('The_Briars_elv',458,80,1,255); -- Paralyze II
+
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,3,1,255); -- Cure III
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,4,1,255); -- Cure IV
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,5,1,255); -- Cure V
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,46,1,255); -- Protect IV
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,51,1,255); -- Shell IV
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,54,1,255); -- Stoneskin
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,162,1,255); -- Stone IV
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,191,1,255); -- Stonega III
+INSERT INTO `mob_spell_lists` VALUES ('Cernunnos',459,255,1,255); -- Break
+
+-- Next Available: 460
 
 /*!40000 ALTER TABLE `mob_spell_lists` ENABLE KEYS */;
 UNLOCK TABLES;

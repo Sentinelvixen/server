@@ -24,7 +24,7 @@ CREATE TABLE `mob_droplist` (
   `itemId` smallint(5) unsigned NOT NULL DEFAULT '0',
   `itemRate` smallint(4) unsigned NOT NULL DEFAULT '0',
   KEY `dropId` (`dropId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=9;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AVG_ROW_LENGTH=9;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -3988,8 +3988,8 @@ INSERT INTO `mob_droplist` VALUES (768,0,0,1000,4141,100);
 INSERT INTO `mob_droplist` VALUES (768,0,0,1000,5568,80);
 INSERT INTO `mob_droplist` VALUES (768,0,0,1000,11757,1000);
 INSERT INTO `mob_droplist` VALUES (768,0,0,1000,16854,100);
-INSERT INTO `mob_droplist` VALUES (769,2,0,1000,880,0);
-INSERT INTO `mob_droplist` VALUES (769,0,0,1000,880,120);
+INSERT INTO `mob_droplist` VALUES (769,2,0,1000,880,0);   -- Bone Chip
+INSERT INTO `mob_droplist` VALUES (769,0,0,1000,880,120); -- Bone Chip
 INSERT INTO `mob_droplist` VALUES (770,0,0,1000,816,70);
 INSERT INTO `mob_droplist` VALUES (770,0,0,1000,14947,100);
 INSERT INTO `mob_droplist` VALUES (770,0,0,1000,18584,350);
@@ -4746,10 +4746,10 @@ INSERT INTO `mob_droplist` VALUES (932,0,0,1000,1064,50);
 INSERT INTO `mob_droplist` VALUES (932,0,0,1000,1165,40);
 INSERT INTO `mob_droplist` VALUES (933,0,0,1000,858,240);
 INSERT INTO `mob_droplist` VALUES (933,0,0,1000,940,150);
-INSERT INTO `mob_droplist` VALUES (934,2,0,1000,751,0);
-INSERT INTO `mob_droplist` VALUES (934,0,0,1000,2525,20);
-INSERT INTO `mob_droplist` VALUES (934,2,0,1000,2531,0);
-INSERT INTO `mob_droplist` VALUES (934,0,0,1000,2531,100);
+INSERT INTO `mob_droplist` VALUES (934,2,0,1000,751,0);    -- Platinum Beastcoin (Steal)
+INSERT INTO `mob_droplist` VALUES (934,0,0,1000,2525,20);  -- Bottled Pixie 
+INSERT INTO `mob_droplist` VALUES (934,2,0,1000,2531,0);   -- Obsidian (Steal) Note: Multiple Steal ites not yet supported
+INSERT INTO `mob_droplist` VALUES (934,0,0,1000,2531,100); -- Obsidian
 INSERT INTO `mob_droplist` VALUES (935,2,0,1000,750,0);
 INSERT INTO `mob_droplist` VALUES (935,0,0,1000,4667,30);
 INSERT INTO `mob_droplist` VALUES (935,0,0,1000,4681,30);
@@ -12883,17 +12883,22 @@ INSERT INTO `mob_droplist` VALUES (2472,0,0,1000,3225,30);
 INSERT INTO `mob_droplist` VALUES (2472,0,0,1000,18892,100);
 INSERT INTO `mob_droplist` VALUES (2472,0,0,1000,19187,100);
 INSERT INTO `mob_droplist` VALUES (2473,0,0,1000,2222,80);
-INSERT INTO `mob_droplist` VALUES (2474,0,0,1000,2160,80);
+INSERT INTO `mob_droplist` VALUES (2474,0,0,1000,2160,50);
 INSERT INTO `mob_droplist` VALUES (2474,0,0,1000,2223,80);
+INSERT INTO `mob_droplist` VALUES (2474,0,0,1000,2333,100);
+INSERT INTO `mob_droplist` VALUES (2474,0,0,1000,8801,10);
 INSERT INTO `mob_droplist` VALUES (2475,0,0,1000,2222,80);
 INSERT INTO `mob_droplist` VALUES (2475,0,0,1000,2711,80);
 INSERT INTO `mob_droplist` VALUES (2476,0,0,1000,2222,80);
 INSERT INTO `mob_droplist` VALUES (2476,0,0,1000,2860,100);
+INSERT INTO `mob_droplist` VALUES (2477,0,0,1000,2160,50);
 INSERT INTO `mob_droplist` VALUES (2477,0,0,1000,2223,80);
-INSERT INTO `mob_droplist` VALUES (2477,0,0,1000,2333,80);
+INSERT INTO `mob_droplist` VALUES (2477,0,0,1000,2333,100);
+INSERT INTO `mob_droplist` VALUES (2477,0,0,1000,8801,10);
 INSERT INTO `mob_droplist` VALUES (2478,0,0,1000,2161,20);
 INSERT INTO `mob_droplist` VALUES (2478,0,0,1000,2223,80);
-INSERT INTO `mob_droplist` VALUES (2479,0,0,1000,2160,80);
+INSERT INTO `mob_droplist` VALUES (2478,0,0,1000,8801,10);
+INSERT INTO `mob_droplist` VALUES (2479,0,0,1000,2160,50);
 INSERT INTO `mob_droplist` VALUES (2479,0,0,1000,2222,80);
 INSERT INTO `mob_droplist` VALUES (2480,0,0,1000,2161,20);
 INSERT INTO `mob_droplist` VALUES (2480,0,0,1000,2223,80);
@@ -14058,6 +14063,7 @@ INSERT INTO `mob_droplist` VALUES (2616,0,0,1000,2728,150);
 INSERT INTO `mob_droplist` VALUES (2617,0,0,1000,573,70);
 INSERT INTO `mob_droplist` VALUES (2617,4,0,1000,953,0);
 INSERT INTO `mob_droplist` VALUES (2617,0,0,1000,953,320);
+INSERT INTO `mob_droplist` VALUES (2617,0,0,1000,5688,150); -- (Wandering Sapling) head_of_grauberg_lettuce
 INSERT INTO `mob_droplist` VALUES (2618,0,0,1000,572,40);
 INSERT INTO `mob_droplist` VALUES (2618,0,0,1000,575,20);
 INSERT INTO `mob_droplist` VALUES (2618,0,0,1000,953,90);
@@ -14507,11 +14513,11 @@ INSERT INTO `mob_droplist` VALUES (2696,0,0,1000,1440,990);
 INSERT INTO `mob_droplist` VALUES (2696,0,0,1000,4898,980);
 INSERT INTO `mob_droplist` VALUES (2696,0,0,1000,17091,850);
 INSERT INTO `mob_droplist` VALUES (2696,0,0,1000,17135,150);
-INSERT INTO `mob_droplist` VALUES (2697,2,0,1000,751,0);
-INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,2525,20);
-INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,2558,130);
-INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,5022,170);
-INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,5072,120);
+INSERT INTO `mob_droplist` VALUES (2697,2,0,1000,751,0);    -- Platinum Beastcoin (Steal)
+INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,2525,20);  -- Bottled Pixie
+INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,2558,130); -- Yagudo Glue
+INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,5022,170); -- Warding Round
+INSERT INTO `mob_droplist` VALUES (2697,0,0,1000,5072,120); -- Goddess's Hymnus
 INSERT INTO `mob_droplist` VALUES (2698,2,0,1000,749,0);
 INSERT INTO `mob_droplist` VALUES (2698,0,0,1000,4980,90);
 INSERT INTO `mob_droplist` VALUES (2698,0,0,1000,5020,120);
@@ -15405,8 +15411,8 @@ INSERT INTO `mob_droplist` VALUES (2837,0,0,1000,501,100);
 INSERT INTO `mob_droplist` VALUES (2837,0,0,1000,13071,100);
 INSERT INTO `mob_droplist` VALUES (2838,0,0,1000,16934,100);
 INSERT INTO `mob_droplist` VALUES (2838,0,0,1000,12797,900);
-INSERT INTO `mob_droplist` VALUES (2839,0,0,1000,13837,930);
-INSERT INTO `mob_droplist` VALUES (2839,0,0,1000,17414,70);
+INSERT INTO `mob_droplist` VALUES (2839,1,1,1000,13837,930);
+INSERT INTO `mob_droplist` VALUES (2839,1,1,1000,17414,70);
 INSERT INTO `mob_droplist` VALUES (2840,0,0,1000,825,430);
 INSERT INTO `mob_droplist` VALUES (2840,0,0,1000,529,100);
 INSERT INTO `mob_droplist` VALUES (2840,0,0,1000,940,300);
@@ -17108,6 +17114,9 @@ INSERT INTO `mob_droplist` VALUES (3204,0,0,1000,868,150); -- (Blackwater Pugil)
 INSERT INTO `mob_droplist` VALUES (3204,0,0,1000,3542,100); -- (Blackwater Pugil) fossilized_bone
 INSERT INTO `mob_droplist` VALUES (3205,0,0,1000,3542,50); -- (Flume Toad) fossilized_bone
 INSERT INTO `mob_droplist` VALUES (3205,0,0,1000,4109,1); -- (Flume Toad) water_cluster
+INSERT INTO `mob_droplist` VALUES (3206,0,0,1000,2151,150); -- (Marid) marid_hide
+INSERT INTO `mob_droplist` VALUES (3206,0,0,1000,2166,5); -- (Marid) lock_of_marid_hair
+INSERT INTO `mob_droplist` VALUES (3207,0,0,1000,3424,1000); -- (Angra Mainyu) fiendish_tome_chapter_21
 
 /*!40000 ALTER TABLE `mob_droplist` ENABLE KEYS */;
 UNLOCK TABLES;

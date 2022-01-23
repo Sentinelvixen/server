@@ -8,6 +8,11 @@ utils = {}
 utils.MAX_UINT32 = 4294967295
 utils.MAX_INT32  = 2147483647
 
+-- Used to keep the linter quiet
+function utils.unused(...)
+    return
+end
+
 -- Shuffles a table and returns a copy of it, not the original.
 function utils.shuffle(tab)
     local copy = {}
@@ -42,7 +47,7 @@ function utils.permgen(max_val, min_val)
 end
 
 function utils.clamp(input, min_val, max_val)
-    if input < min_val then
+    if min_val ~= nil and input < min_val then
         input = min_val
     elseif max_val ~= nil and input > max_val then
         input = max_val
@@ -286,7 +291,7 @@ function utils.getMobSkillLvl(rank, level)
     return 0
 end
 
--- System Strength Bonus table.  This is used by MobBreathMove, but determines weakness of
+-- System Strength Bonus table.  This is used by xi.mobskills.mobBreathMove, but determines weakness of
 -- a definding system, vs the attacking system.  This table is indexed by the attacker.
 -- This table can scale beyond two values, but at this time, no data has been recorded.
 -- Values: 1 == Bonus, -1 == Weakness, 0 == Default (No Weakness or Bonus)
@@ -391,14 +396,48 @@ function utils.prequire(...)
     end
 end
 
+-- Checks to see if a specific value is contained in a table.  This is often
+-- used for tables that do not define specific indices.
+-- See: Sigil NPCs
 function utils.contains(value, collection)
-    for _, v in collection do
+    for _, v in pairs(collection) do
         if value == v then
             return true
         end
     end
 
     return false
+end
+
+-- Checks to see if a specific key is contained in the table.  This is used by
+-- tables that contain specific indices that may be non-sequential.
+-- See: xi.teleport.escape
+function utils.hasKey(keyVal, collection)
+    for k, _ in pairs(collection) do
+        if k == keyVal then
+            return true
+        end
+    end
+
+    return false
+end
+
+-- Selects a random entry from a table, returns the index and the entry
+-- https://gist.github.com/jdev6/1e7ff30671edf88d03d4
+function utils.randomEntryIdx(t)
+    local keys = {}
+    local values = {}
+    for key, value in pairs(t) do
+        keys[#keys+1] = key
+        values[#values+1] = value
+    end
+    local index = keys[math.random(1, #keys)]
+    return index, t[index]
+end
+
+function utils.randomEntry(t)
+    local _, item = utils.randomEntryIdx(t)
+    return item
 end
 
 -- Helper functions for Interaction Framework Quests
@@ -416,7 +455,10 @@ function utils.setQuestVar(player, logId, questId, varName, value)
     player:setCharVar(charVarName, value)
 end
 
--- Used to keep the linter quiet
-function utils.unused(...)
-    return
+-- utils.splitStr("a.b.c", ".") => {"a", "b", "c"}
+function utils.splitStr(s, sep)
+    local fields = {}
+    local pattern = string.format("([^%s]+)", sep)
+    string.gsub(s, pattern, function(c) fields[#fields + 1] = c end)
+    return fields
 end

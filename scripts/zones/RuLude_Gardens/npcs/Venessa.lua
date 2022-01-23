@@ -1,9 +1,6 @@
 -----------------------------------
 -- Area: Ru'Lud Gardens
 --  NPC: Venessa
--- Standard Info NPC
------------------------------------
-require("scripts/globals/settings")
 -----------------------------------
 local entity = {}
 

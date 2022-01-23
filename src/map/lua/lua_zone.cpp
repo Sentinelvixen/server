@@ -19,11 +19,12 @@
 ===========================================================================
 */
 
-#include "common/showmsg.h"
+#include "common/logging.h"
 
 #include "../region.h"
 
 #include "../entities/charentity.h"
+#include "../entities/npcentity.h"
 #include "../zone.h"
 #include "lua_baseentity.h"
 #include "lua_zone.h"
@@ -33,7 +34,7 @@ CLuaZone::CLuaZone(CZone* PZone)
 {
     if (PZone == nullptr)
     {
-        ShowError("CLuaZone created with nullptr instead of valid CZone*!\n");
+        ShowError("CLuaZone created with nullptr instead of valid CZone*!");
     }
 }
 
@@ -78,6 +79,13 @@ sol::table CLuaZone::getPlayers()
 {
     auto table = luautils::lua.create_table();
     m_pLuaZone->ForEachChar([&table](CCharEntity* PChar) { table.add(CLuaBaseEntity(PChar)); });
+    return table;
+}
+
+sol::table CLuaZone::getNPCs()
+{
+    auto table = luautils::lua.create_table();
+    m_pLuaZone->ForEachNpc([&table](CNpcEntity* PNpc) { table.add(CLuaBaseEntity(PNpc)); });
     return table;
 }
 
@@ -133,6 +141,7 @@ void CLuaZone::Register()
     SOL_REGISTER("registerRegion", CLuaZone::registerRegion);
     SOL_REGISTER("levelRestriction", CLuaZone::levelRestriction);
     SOL_REGISTER("getPlayers", CLuaZone::getPlayers);
+    SOL_REGISTER("getNPCs", CLuaZone::getNPCs);
     SOL_REGISTER("getID", CLuaZone::getID);
     SOL_REGISTER("getName", CLuaZone::getName);
     SOL_REGISTER("getRegionID", CLuaZone::getRegionID);
@@ -141,6 +150,12 @@ void CLuaZone::Register()
     SOL_REGISTER("battlefieldsFull", CLuaZone::battlefieldsFull);
     SOL_REGISTER("getWeather", CLuaZone::getWeather);
     SOL_REGISTER("reloadNavmesh", CLuaZone::reloadNavmesh);
+}
+
+std::ostream& operator<<(std::ostream& os, const CLuaZone& zone)
+{
+    std::string id = zone.m_pLuaZone ? std::to_string(zone.m_pLuaZone->GetID()) : "nullptr";
+    return os << "CLuaZone(" << id << ")";
 }
 
 //======================================================//

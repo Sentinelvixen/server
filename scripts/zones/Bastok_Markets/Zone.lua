@@ -5,7 +5,7 @@
 -----------------------------------
 require("scripts/globals/events/harvest_festivals")
 require("scripts/globals/missions")
-require("scripts/globals/settings")
+require("scripts/settings/main")
 require("scripts/globals/zone")
 local ID = require("scripts/zones/Bastok_Markets/IDs")
 -----------------------------------
@@ -20,12 +20,12 @@ zone_object.onZoneIn = function(player, prevZone)
 
     -- FIRST LOGIN (START CS)
     if player:getPlaytime(false) == 0 then
-        if NEW_CHARACTER_CUTSCENE == 1 then
+        if xi.settings.NEW_CHARACTER_CUTSCENE == 1 then
             cs = 0
         end
         player:setPos(-280, -12, -91, 15)
         player:setHomePoint()
-    elseif ENABLE_ROV == 1 and player:getCurrentMission(ROV) == xi.mission.id.rov.RHAPSODIES_OF_VANADIEL and player:getMainLvl()>=3 then
+    elseif xi.settings.ENABLE_ROV == 1 and player:getCurrentMission(ROV) == xi.mission.id.rov.RHAPSODIES_OF_VANADIEL and player:getMainLvl()>=3 then
         cs = 30035
     elseif
         player:getCurrentMission(ROV) == xi.mission.id.rov.FATES_CALL and
@@ -33,13 +33,6 @@ zone_object.onZoneIn = function(player, prevZone)
         (player:getCurrentMission(player:getNation()) == xi.mission.id.nation.SHADOW_LORD and player:getMissionStatus(player:getNation()) >= 4))
     then
         cs = 30036
-    -- SOA 1-1 Optional CS
-    elseif
-        ENABLE_SOA == 1 and
-        player:getCurrentMission(SOA) == xi.mission.id.soa.RUMORS_FROM_THE_WEST and
-        player:getCharVar("SOA_1_CS2") == 0
-    then
-        cs = 22
     end
 
     -- MOG HOUSE EXIT
@@ -73,8 +66,6 @@ zone_object.onEventFinish = function(player, csid, option)
 
     if csid == 0 then
         player:messageSpecial(ID.text.ITEM_OBTAINED, 536)
-    elseif csid == 22 then
-        player:setCharVar("SOA_1_CS2",  1)
     elseif csid == 30035 then
         player:completeMission(xi.mission.log_id.ROV, xi.mission.id.rov.RHAPSODIES_OF_VANADIEL)
         player:addMission(xi.mission.log_id.ROV, xi.mission.id.rov.RESONACE)
