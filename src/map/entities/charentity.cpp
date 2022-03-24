@@ -119,6 +119,11 @@ CCharEntity::CCharEntity()
     m_Wardrobe2  = std::make_unique<CItemContainer>(LOC_WARDROBE2);
     m_Wardrobe3  = std::make_unique<CItemContainer>(LOC_WARDROBE3);
     m_Wardrobe4  = std::make_unique<CItemContainer>(LOC_WARDROBE4);
+    m_Wardrobe5  = std::make_unique<CItemContainer>(LOC_WARDROBE5);
+    m_Wardrobe6  = std::make_unique<CItemContainer>(LOC_WARDROBE6);
+    m_Wardrobe7  = std::make_unique<CItemContainer>(LOC_WARDROBE7);
+    m_Wardrobe8  = std::make_unique<CItemContainer>(LOC_WARDROBE8);
+    m_RecycleBin = std::make_unique<CItemContainer>(LOC_RECYCLEBIN);
 
     memset(&jobs, 0, sizeof(jobs));
     // TODO: -Wno-class-memaccess - clearing an object on non-trivial type use assignment or value-init
@@ -178,6 +183,8 @@ CCharEntity::CCharEntity()
     m_Monstrosity        = 0;
     m_hasTractor         = 0;
     m_hasRaise           = 0;
+    m_weaknessLvl        = 0;
+    m_hasArise           = false;
     m_hasAutoTarget      = 1;
     m_InsideRegionID     = 0;
     m_LevelRestriction   = 0;
@@ -279,7 +286,7 @@ void CCharEntity::pushPacket(CBasicPacket* packet)
 {
     TracyZoneScoped;
     TracyZoneIString(GetName());
-    TracyZoneHex16(packet->id());
+    TracyZoneHex16(packet->getType());
 
     std::lock_guard<std::mutex> lk(m_PacketListMutex);
 
@@ -290,8 +297,8 @@ void CCharEntity::pushPacket(CBasicPacket* packet)
     // and storing the position in the queue of that entry
     for (auto&& entry : PacketList)
     {
-        if (packet->id() == 0x0E && entry->id() == 0x0E || // Entity Update (CEntityUpdatePacket)
-            packet->id() == 0x0D && entry->id() == 0x0D)   // Char Packet (CCharPacket)
+        if (packet->getType() == 0x0E && entry->getType() == 0x0E || // Entity Update (CEntityUpdatePacket)
+            packet->getType() == 0x0D && entry->getType() == 0x0D)   // Char Packet (CCharPacket)
         {
             bool sameMainId     = packet->ref<uint32>(0x04) == entry->ref<uint32>(0x04);
             bool sameTargId     = packet->ref<uint16>(0x08) == entry->ref<uint16>(0x08);
@@ -382,13 +389,13 @@ void CCharEntity::resetPetZoningInfo()
     petZoningInfo.petType    = PET_TYPE::AVATAR;
 }
 /************************************************************************
- *																		*
- *  Возвращаем контейнер с указанным ID. Если ID выходит за рамки, то	*
- *  защищаем сервер от падения использованием контейнера временных		*
- *  предметов в качестве заглушки (из этого контейнера предметы нельзя	*
- *  перемещать, надевать, передавать, продавать и т.д.). Отображаем		*
- *  сообщение о фатальной ошибке.										*
- *																		*
+ *
+ * Return the container with the specified ID.If the ID goes beyond, then *
+ * We protect the server from falling the use of temporary container *
+ * Items as a plug (from this container items can not *
+ * Move, wear, transmit, sell, etc.).Display *
+ * Fatal error message.*
+ *
  ************************************************************************/
 
 CItemContainer* CCharEntity::getStorage(uint8 LocationID)
@@ -421,9 +428,19 @@ CItemContainer* CCharEntity::getStorage(uint8 LocationID)
             return m_Wardrobe3.get();
         case LOC_WARDROBE4:
             return m_Wardrobe4.get();
+        case LOC_WARDROBE5:
+            return m_Wardrobe5.get();
+        case LOC_WARDROBE6:
+            return m_Wardrobe6.get();
+        case LOC_WARDROBE7:
+            return m_Wardrobe7.get();
+        case LOC_WARDROBE8:
+            return m_Wardrobe8.get();
+        case LOC_RECYCLEBIN:
+            return m_RecycleBin.get();
     }
 
-    XI_DEBUG_BREAK_IF(LocationID >= MAX_CONTAINER_ID); // неразрешенный ID хранилища
+    XI_DEBUG_BREAK_IF(LocationID >= CONTAINER_ID::MAX_CONTAINER_ID); // Unresolved storage ID
     return nullptr;
 }
 
@@ -1326,7 +1343,7 @@ void CCharEntity::OnRangedAttack(CRangeState& state, action_t& action)
             }
             else
             {
-                bool  isCritical = xirand::GetRandomNumber(100) < battleutils::GetCritHitRate(this, PTarget, true);
+                bool  isCritical = xirand::GetRandomNumber(100) < battleutils::GetRangedCritHitRate(this, PTarget);
                 float pdif       = battleutils::GetRangedDamageRatio(this, PTarget, isCritical);
 
                 if (isCritical)
@@ -1518,17 +1535,24 @@ void CCharEntity::OnRaise()
     // TODO: Moghancement Experience needs to be factored in here somewhere.
     if (m_hasRaise > 0)
     {
-        uint8 weaknessLvl = 1;
-        if (StatusEffectContainer->HasStatusEffect(EFFECT_WEAKNESS))
+        // Player had no weakness prior, so set this to 1
+        if (m_weaknessLvl == 0)
         {
-            // double weakness!
-            weaknessLvl = 2;
+            m_weaknessLvl = 1;
         }
 
         // add weakness effect (75% reduction in HP/MP)
         if (GetLocalVar("MijinGakure") == 0)
         {
-            CStatusEffect* PWeaknessEffect = new CStatusEffect(EFFECT_WEAKNESS, EFFECT_WEAKNESS, weaknessLvl, 0, 300);
+            uint32 weaknessTime = 300;
+
+            // Arise has a reduced weakness time of 3 mins
+            if (m_hasArise)
+            {
+                weaknessTime = 180;
+            }
+
+            CStatusEffect* PWeaknessEffect = new CStatusEffect(EFFECT_WEAKNESS, EFFECT_WEAKNESS, m_weaknessLvl, 0, weaknessTime);
             StatusEffectContainer->AddStatusEffect(PWeaknessEffect);
         }
 
@@ -1566,12 +1590,13 @@ void CCharEntity::OnRaise()
             hpReturned             = (uint16)(GetMaxHP() * 0.5);
             ratioReturned          = ((GetMLevel() <= 50) ? 0.50f : 0.90f) * (1 - map_config.exp_retain);
         }
-        else if (m_hasRaise == 4)
+        else if (m_hasRaise == 4) // Used for spell "Arise" and Arise from the spell "Reraise IV"
         {
-            actionTarget.animation = 496; // TODO: Verify this Reraise animation
+            actionTarget.animation = 496;
             hpReturned             = (uint16)GetMaxHP();
             ratioReturned          = ((GetMLevel() <= 50) ? 0.50f : 0.90f) * (1 - map_config.exp_retain);
         }
+
         addHP(((hpReturned < 1) ? 1 : hpReturned));
         updatemask |= UPDATE_HP;
         actionTarget.speceffect = SPECEFFECT::RAISE;
@@ -1597,8 +1622,15 @@ void CCharEntity::OnRaise()
             charutils::AddExperiencePoints(true, this, this, xpReturned);
         }
 
-        SetLocalVar("MijinGakure", 0);
+        // If Arise was used then apply a reraise 3 effect on the target
+        if (m_hasArise)
+        {
+            CStatusEffect* PReraiseEffect = new CStatusEffect(EFFECT_RERAISE, EFFECT_RERAISE, 3, 0, 3600);
+            StatusEffectContainer->AddStatusEffect(PReraiseEffect);
+        }
 
+        SetLocalVar("MijinGakure", 0);
+        m_hasArise = false;
         m_hasRaise = 0;
     }
 }
@@ -1642,13 +1674,13 @@ void CCharEntity::OnItemFinish(CItemState& state, action_t& action)
         PItem->setLastUseTime(CVanaTime::getInstance()->getVanaTime());
 
         char extra[sizeof(PItem->m_extra) * 2 + 1];
-        Sql_EscapeStringLen(SqlHandle, extra, (const char*)PItem->m_extra, sizeof(PItem->m_extra));
+        sql->EscapeStringLen(extra, (const char*)PItem->m_extra, sizeof(PItem->m_extra));
 
         const char* Query = "UPDATE char_inventory "
                             "SET extra = '%s' "
                             "WHERE charid = %u AND location = %u AND slot = %u;";
 
-        Sql_Query(SqlHandle, Query, extra, this->id, PItem->getLocationID(), PItem->getSlotID());
+        sql->Query(Query, extra, this->id, PItem->getLocationID(), PItem->getSlotID());
 
         if (PItem->getCurrentCharges() != 0)
         {
@@ -1724,11 +1756,26 @@ void CCharEntity::Die()
         float retainPercent = std::clamp(map_config.exp_retain + getMod(Mod::EXPERIENCE_RETAINED) / 100.0f, 0.0f, 1.0f);
         charutils::DelExperiencePoints(this, retainPercent, 0);
     }
+
+    luautils::OnPlayerDeath(this);
 }
 
 void CCharEntity::Die(duration _duration)
 {
     this->ClearTrusts();
+
+    if (StatusEffectContainer->HasStatusEffect(EFFECT_WEAKNESS))
+    {
+        // Remove weakness effect as per retail but keep track of weakness
+        StatusEffectContainer->DelStatusEffectSilent(EFFECT_WEAKNESS);
+        // Increase the weakness counter if previously weakened
+        m_weaknessLvl++;
+    }
+    else
+    {
+        // Reset weakness here, then +1 it on raise as we had no weakness prior
+        m_weaknessLvl = 0;
+    }
 
     m_deathSyncTime = server_clock::now() + death_update_frequency;
     PAI->ClearStateStack();
@@ -1792,11 +1839,11 @@ int32 CCharEntity::GetTimeCreated()
 {
     const char* fmtQuery = "SELECT UNIX_TIMESTAMP(timecreated) FROM chars WHERE charid = %u;";
 
-    int32 ret = Sql_Query(SqlHandle, fmtQuery, id);
+    int32 ret = sql->Query(fmtQuery, id);
 
-    if (ret != SQL_ERROR && Sql_NumRows(SqlHandle) != 0 && Sql_NextRow(SqlHandle) == SQL_SUCCESS)
+    if (ret != SQL_ERROR && sql->NumRows() != 0 && sql->NextRow() == SQL_SUCCESS)
     {
-        return Sql_GetIntData(SqlHandle, 0);
+        return sql->GetIntData(0);
     }
 
     return 0;

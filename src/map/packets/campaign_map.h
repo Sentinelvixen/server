@@ -1,4 +1,4 @@
-﻿/*
+/*
 ===========================================================================
 
   Copyright (c) 2010-2015 Darkstar Dev Teams
@@ -24,20 +24,19 @@
 
 #include "../../common/cbasetypes.h"
 
+#include "../campaign_system.h"
 #include "basic.h"
-
-/************************************************************************
- *																		*
- *  																		*
- *																		*
- ************************************************************************/
 
 class CCharEntity;
 
 class CCampaignPacket : public CBasicPacket
 {
 public:
-    CCampaignPacket(CCharEntity* PChar, uint8 number);
+    CCampaignPacket(CCharEntity* PChar, CampaignState state, uint8 number);
+
+private:
+    void SetRegions(std::vector<CampaignRegion> areas, int start = 0);
+    void SetNations(std::vector<CampaignNation> nations);
 };
 
 #endif

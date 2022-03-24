@@ -432,7 +432,7 @@ void CZoneEntities::DecreaseZoneCounter(CCharEntity* PChar)
     ShowDebug("CZone:: %s DecreaseZoneCounter <%u> %s", m_zone->GetName(), m_charList.size(), PChar->GetName());
 }
 
-uint16 CZoneEntities::GetNewTargID()
+uint16 CZoneEntities::GetNewCharTargID()
 {
     uint16 targid = 0x400;
     for (EntityList_t::const_iterator it = m_charList.begin(); it != m_charList.end(); ++it)
@@ -444,6 +444,13 @@ uint16 CZoneEntities::GetNewTargID()
         targid++;
     }
     return targid;
+}
+
+uint16 CZoneEntities::GetNewDynamicTargID()
+{
+    // TODO: Don't use static
+    static uint16 targid = 0x800; // 2048
+    return targid++;
 }
 
 bool CZoneEntities::CharListEmpty() const
@@ -733,7 +740,8 @@ CBaseEntity* CZoneEntities::GetEntity(uint16 targid, uint8 filter)
             }
         }
     }
-    else if (targid < 0x780)
+    // TODO: Combine Trusts and Pets into the same id space
+    else if (targid < 0x780) // 1920
     {
         if (filter & TYPE_PET)
         {
@@ -744,7 +752,7 @@ CBaseEntity* CZoneEntities::GetEntity(uint16 targid, uint8 filter)
             }
         }
     }
-    else if (targid < 0x800)
+    else if (targid < 0x800) // 2048
     {
         if (filter & TYPE_TRUST)
         {
@@ -755,6 +763,30 @@ CBaseEntity* CZoneEntities::GetEntity(uint16 targid, uint8 filter)
             }
         }
     }
+    else if (targid < 0x1000) // 2048 - 4096 are dynamic entities
+    {
+        if (filter & TYPE_NPC)
+        {
+            EntityList_t::const_iterator it = m_npcList.find(targid);
+            if (it != m_npcList.end())
+            {
+                return it->second;
+            }
+        }
+        if (filter & TYPE_MOB)
+        {
+            EntityList_t::const_iterator it = m_mobList.find(targid);
+            if (it != m_mobList.end())
+            {
+                return it->second;
+            }
+        }
+    }
+    else
+    {
+        ShowError("Trying to get entity outside of valid id bounds (%u)", targid);
+    }
+
     return nullptr;
 }
 
@@ -899,14 +931,14 @@ CCharEntity* CZoneEntities::GetCharByID(uint32 id)
 void CZoneEntities::PushPacket(CBaseEntity* PEntity, GLOBAL_MESSAGE_TYPE message_type, CBasicPacket* packet)
 {
     TracyZoneScoped;
-    TracyZoneHex16(packet->id());
+    TracyZoneHex16(packet->getType());
 
     if (!packet)
     {
         return;
     }
     // Do not send packets that are updates of a hidden GM..
-    if (packet->id() == 0x00D && PEntity != nullptr && PEntity->objtype == TYPE_PC && ((CCharEntity*)PEntity)->m_isGMHidden)
+    if (packet->getType() == 0x00D && PEntity != nullptr && PEntity->objtype == TYPE_PC && ((CCharEntity*)PEntity)->m_isGMHidden)
     {
         // Ensure this packet is not despawning us..
         if (packet->ref<uint8>(0x0A) != 0x20)
@@ -933,7 +965,7 @@ void CZoneEntities::PushPacket(CBaseEntity* PEntity, GLOBAL_MESSAGE_TYPE message
                 TracyZoneCString("CHAR_INRANGE");
                 // todo: rewrite packet handlers and use enums instead of rawdog packet ids
                 // 30 yalms if action packet, 50 otherwise
-                const int checkDistanceSq = packet->id() == 0x0028 ? 900 : 2500;
+                const int checkDistanceSq = packet->getType() == 0x0028 ? 900 : 2500;
 
                 for (EntityList_t::const_iterator it = m_charList.begin(); it != m_charList.end(); ++it)
                 {
@@ -943,7 +975,7 @@ void CZoneEntities::PushPacket(CBaseEntity* PEntity, GLOBAL_MESSAGE_TYPE message
                         if (distanceSquared(PEntity->loc.p, PCurrentChar->loc.p) < checkDistanceSq &&
                             ((PEntity->objtype != TYPE_PC) || (((CCharEntity*)PEntity)->m_moghouseID == PCurrentChar->m_moghouseID)))
                         {
-                            if (packet->id() == 0x00E && (packet->ref<uint8>(0x0A) != 0x20 || packet->ref<uint8>(0x0A) != 0x0F))
+                            if (packet->getType() == 0x00E && (packet->ref<uint8>(0x0A) != 0x20 || packet->ref<uint8>(0x0A) != 0x0F))
                             {
                                 uint32 id     = packet->ref<uint32>(0x04);
                                 uint16 targid = packet->ref<uint16>(0x08);
@@ -954,7 +986,7 @@ void CZoneEntities::PushPacket(CBaseEntity* PEntity, GLOBAL_MESSAGE_TYPE message
 
                                 if (entity)
                                 {
-                                    if (entity->targid < 0x400)
+                                    if (entity->targid < 0x400 || entity->targid >= 0x800) // TODO: Don't hard code me!
                                     {
                                         if (entity->objtype == TYPE_MOB)
                                         {
